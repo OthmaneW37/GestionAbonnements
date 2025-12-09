@@ -10,39 +10,32 @@ import java.util.List;
  */
 public class SubscriptionService {
 
-    private final CsvService csvService;
+    private final com.emsi.subtracker.dao.SubscriptionDAO subscriptionDAO;
 
     public SubscriptionService() {
-        this.csvService = new CsvService();
+        this.subscriptionDAO = new com.emsi.subtracker.dao.impl.SubscriptionDAOImpl();
     }
 
     /**
      * Récupère tous les abonnements.
      */
     public List<Abonnement> getAll() {
-        return csvService.chargerTout();
+        return subscriptionDAO.findAll();
     }
 
     /**
      * Ajoute un abonnement et sauvegarde la liste mise à jour.
      */
     public void add(Abonnement abonnement) {
-        List<Abonnement> list = getAll();
-        list.add(abonnement);
-        csvService.sauvegarderTout(list);
+        subscriptionDAO.save(abonnement);
     }
 
     /**
      * Supprime un abonnement par son ID et sauvegarde.
      */
     public void remove(int id) {
-        List<Abonnement> list = getAll();
-
-        // Suppression via l'ID
-        boolean removed = list.removeIf(a -> a.getId() == id);
-
+        boolean removed = subscriptionDAO.delete(id);
         if (removed) {
-            csvService.sauvegarderTout(list);
             System.out.println("Abonnement ID " + id + " supprimé.");
         } else {
             System.err.println("Aucun abonnement trouvé avec l'ID " + id);

@@ -7,7 +7,8 @@ import java.time.format.DateTimeParseException;
  * Représente un abonnement utilisateur.
  * Gère la sérialisation vers/depuis le format CSV.
  */
-public class Abonnement {
+public class
+Abonnement {
     private int id;
     private String nom;
     private double prix;
