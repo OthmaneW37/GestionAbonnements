@@ -14,6 +14,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1280, 800);
         scene.getStylesheets().add(Main.class.getResource("/styles_v2.css").toExternalForm());
         stage.setTitle("Subscription Tracker");
+        stage.getIcons().add(new javafx.scene.image.Image(Main.class.getResourceAsStream("/images/LogoST.png")));
         stage.setScene(scene);
         stage.show();
 
