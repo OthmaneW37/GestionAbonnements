@@ -19,8 +19,10 @@ public class Main extends Application {
 
         primaryStage = stage;
         setRoot("views/login");
-        primaryStage.setTitle("Subscription Tracker - Login");
-        primaryStage.setMaximized(true); // Start full screen
+        primaryStage.setTitle("Subscription Tracker");
+        primaryStage.setMinWidth(1000);
+        primaryStage.setMinHeight(700);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

@@ -13,52 +13,60 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.emsi.subtracker.controllers.DashboardController"
-           stylesheets="@../styles/style.css">
+           stylesheets="@../styles/style.css"
+           styleClass="main-container">
     
     <top>
-        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card" style="-fx-border-radius: 0; -fx-background-radius: 0;">
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="navbar">
              <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
+                <Insets top="15" right="30" bottom="15" left="30"/>
             </padding>
-            <Label text="SUB TRACKER" styleClass="header-label"/>
+            <Label text="SUB TRACKER" styleClass="brand-label"/>
             <HBox HBox.hgrow="ALWAYS" /> <!-- Spacer -->
-            <Button text="Dashboard" styleClass="button-secondary"/>
-            <Button text="Statistics" onAction="#handleGoToStats"/>
-            <Button text="Logout" styleClass="button-danger" onAction="#handleLogout"/>
+            <Button text="DASHBOARD" styleClass="nav-button-active"/>
+            <Button text="STATISTICS" styleClass="nav-button" onAction="#handleGoToStats"/>
+            <Button text="LOGOUT" styleClass="nav-button-danger" onAction="#handleLogout"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="20">
+        <VBox spacing="15" styleClass="content-area">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
-            <!-- Toolbar -->
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="searchField" promptText="Search subscription..." HBox.hgrow="ALWAYS"/>
-                <ComboBox fx:id="categoryFilter" promptText="All Categories" prefWidth="150"/>
+            <!-- Header / Toolbar -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox>
+                     <Label text="Overview" styleClass="page-title"/>
+                     <Label text="Manage your subscriptions efficiently." styleClass="page-subtitle"/>
+                </VBox>
+                <HBox HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="searchField" promptText="🔍 Search..." prefWidth="250" styleClass="search-bar"/>
+                <ComboBox fx:id="categoryFilter" promptText="Category" prefWidth="160" styleClass="combo-box"/>
             </HBox>
 
-            <!-- Table -->
-            <TableView fx:id="subscriptionTable" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn fx:id="colName" text="Name" prefWidth="150"/>
-                    <TableColumn fx:id="colPrice" text="Price" prefWidth="100"/>
-                    <TableColumn fx:id="colDate" text="Start Date" prefWidth="120"/>
-                    <TableColumn fx:id="colCategory" text="Category" prefWidth="120"/>
-                    <TableColumn fx:id="colFrequency" text="Frequency" prefWidth="100"/>
-                </columns>
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                </columnResizePolicy>
-            </TableView>
+            <!-- Table Container -->
+            <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+                <TableView fx:id="subscriptionTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colName" text="NAME" prefWidth="200"/>
+                        <TableColumn fx:id="colPrice" text="PRICE (€)" prefWidth="120"/>
+                        <TableColumn fx:id="colDate" text="RENEWAL DATE" prefWidth="150"/>
+                        <TableColumn fx:id="colCategory" text="CATEGORY" prefWidth="150"/>
+                        <TableColumn fx:id="colFrequency" text="FREQUENCY" prefWidth="120"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
 
-            <!-- Actions -->
-            <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Button text="Add New" onAction="#handleAdd"/>
-                <Button text="Edit Selected" onAction="#handleEdit"/>
-                <Button text="Delete Selected" styleClass="button-danger" onAction="#handleDelete"/>
+            <!-- Actions Footer -->
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <Button text="+ ADD SUBSCRIPTION" styleClass="action-button-primary" onAction="#handleAdd"/>
+                <Button text="EDIT" styleClass="action-button-secondary" onAction="#handleEdit"/>
+                <Button text="DELETE" styleClass="action-button-danger" onAction="#handleDelete"/>
             </HBox>
         </VBox>
     </center>

@@ -107,6 +107,7 @@ public class LoginController implements Initializable {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Subscription Tracker - Dashboard");
+            stage.setMaximized(true);
         } catch (IOException e) {
             e.printStackTrace();
             showError("Error loading dashboard.");

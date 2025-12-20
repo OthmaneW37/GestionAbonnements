@@ -10,30 +10,34 @@
 
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.emsi.subtracker.controllers.LoginController"
-           stylesheets="@../styles/style.css">
+           stylesheets="@../styles/style.css"
+           styleClass="main-container">
     
-    <VBox alignment="CENTER" spacing="20" maxWidth="400" maxHeight="500" styleClass="card">
+    <VBox alignment="CENTER" spacing="20" maxWidth="450" maxHeight="550" styleClass="card">
         <padding>
-            <Insets top="40" right="40" bottom="40" left="40"/>
+            <Insets top="50" right="50" bottom="50" left="50"/>
         </padding>
 
-        <Label text="SUB TRACKER" styleClass="header-label"/>
+        <Label text="SUB TRACKER" styleClass="brand-label"/>
         
-        <Label text="LOGIN" style="-fx-font-size: 16px; -fx-text-fill: #aaaaaa;"/>
+        <Label text="Welcome Back" styleClass="page-title" style="-fx-font-size: 20px;"/>
+        <Label text="Login to continue" styleClass="page-subtitle"/>
 
         <VBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Username" />
-            <TextField fx:id="usernameField" promptText="Enter your username"/>
+            <Label text="USERNAME" style="-fx-font-weight:bold;"/>
+            <TextField fx:id="usernameField" promptText="e.g. admin" styleClass="search-bar"/>
         </VBox>
 
         <VBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Password" />
-            <PasswordField fx:id="passwordField" promptText="Enter your password"/>
+            <Label text="PASSWORD" style="-fx-font-weight:bold;"/>
+            <PasswordField fx:id="passwordField" promptText="••••••••" styleClass="search-bar"/>
         </VBox>
 
-        <Button text="SIGN IN" maxWidth="Infinity" onAction="#handleLogin"/>
-        <Button text="CREATE ACCOUNT" maxWidth="Infinity" styleClass="button-secondary" onAction="#handleRegister"/>
+        <VBox spacing="10">
+            <Button text="SIGN IN" maxWidth="Infinity" styleClass="action-button-primary" onAction="#handleLogin"/>
+            <Button text="CREATE ACCOUNT" maxWidth="Infinity" styleClass="action-button-secondary" onAction="#handleRegister"/>
+        </VBox>
         
-        <Label fx:id="errorLabel" text="" textFill="#cf6679" visible="false"/>
+        <Label fx:id="errorLabel" text="" textFill="#ff6b6b" visible="false"/>
     </VBox>
 </StackPane>

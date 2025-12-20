@@ -13,48 +13,57 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.emsi.subtracker.controllers.StatsController"
-           stylesheets="@../styles/style.css">
+           stylesheets="@../styles/style.css"
+           styleClass="main-container">
     
     <top>
-        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card" style="-fx-border-radius: 0; -fx-background-radius: 0;">
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="navbar">
              <padding>
-                <Insets top="15" right="20" bottom="15" left="20"/>
+                <Insets top="15" right="30" bottom="15" left="30"/>
             </padding>
-            <Label text="SUB TRACKER" styleClass="header-label"/>
+            <Label text="SUB TRACKER" styleClass="brand-label"/>
             <HBox HBox.hgrow="ALWAYS" /> <!-- Spacer -->
-            <Button text="Dashboard" onAction="#handleGoToDashboard"/>
-            <Button text="Statistics" styleClass="button-secondary"/>
-            <Button text="Logout" styleClass="button-danger" onAction="#handleLogout"/>
+            <Button text="DASHBOARD" styleClass="nav-button" onAction="#handleGoToDashboard"/>
+            <Button text="STATISTICS" styleClass="nav-button-active"/>
+            <Button text="LOGOUT" styleClass="nav-button-danger" onAction="#handleLogout"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="20">
+        <VBox spacing="25" styleClass="content-area">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets top="30" right="40" bottom="30" left="40"/>
             </padding>
 
-            <Label text="Financial Overview" styleClass="header-label"/>
+            <VBox>
+                 <Label text="Financial Analysis" styleClass="page-title"/>
+                 <Label text="Visual insights into your spending habits." styleClass="page-subtitle"/>
+            </VBox>
             
-            <HBox spacing="20" alignment="CENTER">
+            <HBox spacing="20" alignment="CENTER_LEFT">
                  <!-- Total Card -->
-                 <VBox styleClass="card" alignment="CENTER" minWidth="200">
-                     <Label text="Estimated Monthly Total" />
-                     <Label fx:id="totalLabel" text="$0.00" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #00e676;"/>
+                 <VBox styleClass="card" alignment="CENTER_LEFT" minWidth="250" spacing="5">
+                     <padding>
+                         <Insets top="20" right="20" bottom="20" left="20"/>
+                     </padding>
+                     <Label text="Monthly Total" styleClass="page-subtitle"/>
+                     <Label fx:id="totalLabel" text="0.00 MAD" style="-fx-font-size: 36px; -fx-font-weight: 900; -fx-text-fill: linear-gradient(to right, #00e676, #1de9b6);"/>
                  </VBox>
             </HBox>
 
             <HBox spacing="20" VBox.vgrow="ALWAYS">
                 <!-- Pie Chart -->
-                <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                    <Label text="Spend by Category" style="-fx-font-size: 18px;"/>
-                    <PieChart fx:id="pieChart" />
+                <VBox styleClass="table-container" HBox.hgrow="ALWAYS" spacing="10">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="BY CATEGORY" style="-fx-font-weight:bold; -fx-text-fill:#888;"/>
+                    <PieChart fx:id="pieChart" style="-fx-background-color: transparent;" legendSide="RIGHT"/>
                 </VBox>
                 
                 <!-- Bar Chart -->
-                <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                    <Label text="Monthly Forecast" style="-fx-font-size: 18px;"/>
-                    <BarChart fx:id="barChart">
+                <VBox styleClass="table-container" HBox.hgrow="ALWAYS" spacing="10">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <Label text="MONTHLY FORECAST" style="-fx-font-weight:bold; -fx-text-fill:#888;"/>
+                    <BarChart fx:id="barChart" style="-fx-background-color: transparent;" legendVisible="false">
                         <xAxis>
                             <CategoryAxis label="Month" />
                         </xAxis>

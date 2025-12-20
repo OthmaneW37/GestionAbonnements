@@ -180,6 +180,13 @@ public class DashboardController implements Initializable {
         Dialog<Subscription> dialog = new Dialog<>();
         dialog.setTitle(sub == null ? "New Subscription" : "Edit Subscription");
         dialog.setHeaderText(null);
+        dialog.setResizable(true); // Allow resizing
+        dialog.getDialogPane().setMinHeight(600); // Force larger height
+        dialog.getDialogPane().setMinWidth(500); // Force larger width
+
+        // Inject Stylesheet
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
+        dialog.getDialogPane().getStyleClass().add("custom-dialog");
 
         // UI Components
         ComboBox<String> categorySelector = new ComboBox<>();
@@ -187,6 +194,7 @@ public class DashboardController implements Initializable {
         categorySelector.setItems(FXCollections.observableArrayList(rawCats));
         categorySelector.setPromptText("Select a Category first...");
         categorySelector.setMaxWidth(Double.MAX_VALUE);
+        categorySelector.getStyleClass().add("combo-box");
 
         FlowPane templatesPane = new FlowPane();
         templatesPane.setHgap(10);
@@ -195,11 +203,18 @@ public class DashboardController implements Initializable {
 
         TextField nameField = new TextField();
         nameField.setPromptText("Subscription Name");
+        nameField.getStyleClass().add("text-field");
+
         TextField priceField = new TextField();
         priceField.setPromptText("Price (€)");
+        priceField.getStyleClass().add("text-field");
+
         DatePicker datePicker = new DatePicker(LocalDate.now());
+        datePicker.getStyleClass().add("text-field"); // Reuse text-field style for consistency
+
         ComboBox<String> freqBox = new ComboBox<>(FXCollections.observableArrayList("Monthly", "Yearly"));
         freqBox.setValue("Monthly");
+        freqBox.getStyleClass().add("combo-box");
 
         // Logic for Template Selection
         categorySelector.setOnAction(e -> {
@@ -212,9 +227,11 @@ public class DashboardController implements Initializable {
 
                 for (SubscriptionTemplate t : relevant) {
                     Button card = new Button(t.getName());
+                    // Dynamic style for buttons
                     card.setStyle("-fx-background-color: " + t.getHexColor()
-                            + "; -fx-text-fill: white; -fx-font-weight: bold;");
+                            + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;");
                     card.setPrefWidth(120);
+                    card.setMinHeight(40);
                     card.setOnAction(evt -> {
                         nameField.setText(t.getName());
                         priceField.setText(String.valueOf(t.getDefaultPrice()));
@@ -234,16 +251,33 @@ public class DashboardController implements Initializable {
         }
 
         // Layout
-        VBox form = new VBox(10,
-                new Label("1. Choose Category:"), categorySelector,
-                new Label("2. Pick Service (Optional):"), templatesPane,
-                new Separator(),
-                new Label("3. Details:"), nameField, priceField, datePicker, freqBox);
+        VBox form = new VBox(15);
         form.setPadding(new Insets(20));
+        form.setStyle("-fx-background-color: #24243e;"); // Ensure background match
+
+        Label step1 = new Label("1. Choose Category:");
+        step1.getStyleClass().add("dialog-label");
+        Label step2 = new Label("2. Pick Service (Optional):");
+        step2.getStyleClass().add("dialog-label");
+        Label step3 = new Label("3. Details:");
+        step3.getStyleClass().add("dialog-label");
+
+        form.getChildren().addAll(
+                step1, categorySelector,
+                step2, templatesPane,
+                new Separator(),
+                step3, nameField, priceField, datePicker, freqBox);
+
         dialog.getDialogPane().setContent(form);
 
         ButtonType saveType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveType, ButtonType.CANCEL);
+
+        // Find buttons and style them
+        Button saveBtn = (Button) dialog.getDialogPane().lookupButton(saveType);
+        saveBtn.getStyleClass().add("action-button-primary");
+        Button cancelBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
+        cancelBtn.getStyleClass().add("action-button-secondary");
 
         dialog.setResultConverter(b -> {
             if (b == saveType) {
