@@ -2,140 +2,65 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="768.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.emsi.subtracker.views.DashboardController">
-   
-   <!-- SIDEBAR -->
-   <left>
-      <VBox prefWidth="250.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-         <children>
-            <HBox alignment="CENTER_LEFT" spacing="15">
-               <padding>
-                  <Insets left="20.0" top="30.0" bottom="30.0" />
-               </padding>
-               <children>
-                  <javafx.scene.image.ImageView fitHeight="50.0" fitWidth="50.0" preserveRatio="true">
-                     <image>
-                        <javafx.scene.image.Image url="@../images/LogoST.png" />
-                     </image>
-                  </javafx.scene.image.ImageView>
-                  <Label styleClass="app-title" style="-fx-padding: 0;" text="SubTracker" />
-               </children>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+           fx:controller="com.emsi.subtracker.controllers.DashboardController"
+           stylesheets="@../styles/style.css">
+    
+    <top>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="card" style="-fx-border-radius: 0; -fx-background-radius: 0;">
+             <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            <Label text="SUB TRACKER" styleClass="header-label"/>
+            <HBox HBox.hgrow="ALWAYS" /> <!-- Spacer -->
+            <Button text="Dashboard" styleClass="button-secondary"/>
+            <Button text="Statistics" onAction="#handleGoToStats"/>
+            <Button text="Logout" styleClass="button-danger" onAction="#handleLogout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Toolbar -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search subscription..." HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="categoryFilter" promptText="All Categories" prefWidth="150"/>
             </HBox>
-            <VBox spacing="10.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="nav-button, nav-button-active" text="Dashboard" />
-                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#goToAnalytics" styleClass="nav-button" text="Analytics" />
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="nav-button" text="Paramètres" />
-               </children>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </VBox>
-            <Label text="v1.0.2" textFill="#555555" VBox.vgrow="NEVER">
-               <padding>
-                  <Insets bottom="20.0" left="20.0" />
-               </padding>
-            </Label>
-         </children>
-      </VBox>
-   </left>
-   
-   <!-- MAIN CONTENT -->
-   <center>
-      <VBox spacing="30.0" BorderPane.alignment="CENTER">
-         <padding>
-            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-         </padding>
-         
-         <!-- HEADER -->
-         <HBox alignment="CENTER_LEFT" spacing="20.0">
-            <children>
-               <VBox>
-                  <children>
-                     <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Bonjour, Othmane" />
-                     <Label style="-fx-text-fill: #808080;" text="Voici un aperçu de vos abonnements aujourd'hui." />
-                  </children>
-               </VBox>
-               <Region HBox.hgrow="ALWAYS" />
-               <TextField promptText="Rechercher..." styleClass="search-field" prefWidth="300.0" />
-               <Button id="btnAdd" mnemonicParsing="false" onAction="#onBtnAjouterClick" styleClass="btn-primary" text="+ Ajouter" />
-            </children>
-         </HBox>
-         
-         <!-- STATS CARDS -->
-         <HBox spacing="30.0">
-            <children>
-               <!-- Card 1: Total Mensuel -->
-               <VBox prefWidth="300.0" styleClass="card" HBox.hgrow="ALWAYS">
-                  <padding>
-                     <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                  </padding>
-                  <children>
-                     <Label styleClass="card-title" text="Dépenses Mensuelles" />
-                     <Region prefHeight="10.0" />
-                     <HBox alignment="BASELINE_LEFT" spacing="10.0">
-                        <children>
-                           <Label fx:id="lblTotalMensuel" styleClass="card-value, card-value-green" text="0.00 DH" />
-                           <Label style="-fx-text-fill: #808080;" text="/ mois" />
-                        </children>
-                     </HBox>
-                  </children>
-               </VBox>
-               
-               <!-- Card 2: Placeholder for Projection -->
-               <VBox prefWidth="300.0" styleClass="card" HBox.hgrow="ALWAYS">
-                  <padding>
-                     <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                  </padding>
-                  <children>
-                     <Label styleClass="card-title" text="Nombre d'Abonnements" />
-                     <Region prefHeight="10.0" />
-                     <HBox alignment="BASELINE_LEFT" spacing="10.0">
-                        <children>
-                           <Label text="Actifs" styleClass="card-value" />
-                           <!-- Note: We could bind this count in Java later, hardcoded text style for now -->
-                        </children>
-                     </HBox>
-                     <Label text="Gérez vos services en temps réel." style="-fx-text-fill: #666; -fx-padding: 10 0 0 0;" wrapText="true"/>
-                  </children>
-               </VBox>
-            </children>
-         </HBox>
-         
-         <!-- CARDS GRID -->
-         <VBox spacing="15.0" VBox.vgrow="ALWAYS">
-             <children>
-                 <HBox alignment="CENTER_LEFT">
-                     <children>
-                         <Label style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" text="Vos Abonnements" />
-                         <Region HBox.hgrow="ALWAYS" />
-                         <Button mnemonicParsing="false" onAction="#onBtnSupprimerClick" styleClass="btn-danger" text="Supprimer Sélection" />
-                     </children>
-                 </HBox>
-                 
-                 <javafx.scene.control.ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
-                     <content>
-                        <javafx.scene.layout.FlowPane fx:id="cardsContainer" hgap="20.0" vgap="20.0" style="-fx-background-color: transparent;">
-                            <padding>
-                                <Insets top="10.0" left="10.0" right="10.0" bottom="10.0" />
-                            </padding>
-                        </javafx.scene.layout.FlowPane>
-                     </content>
-                 </javafx.scene.control.ScrollPane>
-             </children>
-         </VBox>
-         
-      </VBox>
-   </center>
-   
+
+            <!-- Table -->
+            <TableView fx:id="subscriptionTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colName" text="Name" prefWidth="150"/>
+                    <TableColumn fx:id="colPrice" text="Price" prefWidth="100"/>
+                    <TableColumn fx:id="colDate" text="Start Date" prefWidth="120"/>
+                    <TableColumn fx:id="colCategory" text="Category" prefWidth="120"/>
+                    <TableColumn fx:id="colFrequency" text="Frequency" prefWidth="100"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+
+            <!-- Actions -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Add New" onAction="#handleAdd"/>
+                <Button text="Edit Selected" onAction="#handleEdit"/>
+                <Button text="Delete Selected" styleClass="button-danger" onAction="#handleDelete"/>
+            </HBox>
+        </VBox>
+    </center>
+
 </BorderPane>

@@ -5,14 +5,12 @@ public class SubscriptionTemplate {
     private String category;
     private double defaultPrice;
     private String hexColor;
-    private String logoUrl;
 
-    public SubscriptionTemplate(String name, String category, double defaultPrice, String hexColor, String logoUrl) {
+    public SubscriptionTemplate(String name, String category, double defaultPrice, String hexColor) {
         this.name = name;
         this.category = category;
         this.defaultPrice = defaultPrice;
         this.hexColor = hexColor;
-        this.logoUrl = logoUrl;
     }
 
     public String getName() {
@@ -31,7 +29,8 @@ public class SubscriptionTemplate {
         return hexColor;
     }
 
-    public String getLogoUrl() {
-        return logoUrl;
+    @Override
+    public String toString() {
+        return name;
     }
 }

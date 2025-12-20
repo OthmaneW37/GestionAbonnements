@@ -1,60 +1,56 @@
 package com.emsi.subtracker.services;
 
-import com.emsi.subtracker.models.Abonnement;
+import com.emsi.subtracker.models.SubscriptionTemplate;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * Service gérant la persistance des abonnements dans un fichier CSV.
- */
 public class CsvService {
-    private static final String FILE_NAME = "data_abonnements.csv";
 
-    /**
-     * Charge tous les abonnements depuis le fichier CSV.
-     * Si le fichier n'existe pas, retourne une liste vide.
-     */
-    public List<Abonnement> chargerTout() {
-        File file = new File(FILE_NAME);
+    public List<SubscriptionTemplate> loadTemplates() {
+        List<SubscriptionTemplate> templates = new ArrayList<>();
+        try (InputStream is = getClass().getResourceAsStream("/data/subscriptions.csv");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
 
-        if (!file.exists()) {
-            System.out.println("Fichier de données introuvable (" + FILE_NAME + "). Démarrage avec une liste vide.");
-            return new ArrayList<>();
-        }
+            if (is == null) {
+                System.err.println("CSV Not Found!");
+                return templates;
+            }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            return br.lines()
-                    .map(String::trim)
-                    .filter(line -> !line.isEmpty())
-                    .map(Abonnement::fromCsvString)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
+            // Skip header
+            String line = reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    String name = parts[0].trim();
+                    String category = parts[1].trim();
+                    double price = 0.0;
+                    try {
+                        price = Double.parseDouble(parts[2].trim());
+                    } catch (NumberFormatException e) {
+                        /* default 0 */ }
+                    String color = parts[3].trim();
+
+                    templates.add(new SubscriptionTemplate(name, category, price, color));
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
         }
+        return templates;
     }
 
-    /**
-     * Sauvegarde la liste complète des abonnements dans le fichier CSV.
-     * Écrase le contenu précédent.
-     */
-    public void sauvegarderTout(List<Abonnement> abonnements) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            for (Abonnement sub : abonnements) {
-                String line = Abonnement.toCsvString(sub);
-                bw.write(line);
-                bw.newLine();
-            }
-            System.out.println("Sauvegarde effectuée avec succès (" + abonnements.size() + " items).");
-        } catch (IOException e) {
-            System.err.println("Erreur lors de l'écriture du fichier : " + e.getMessage());
-            e.printStackTrace();
-        }
+    public List<String> getUniqueCategories(List<SubscriptionTemplate> templates) {
+        return templates.stream()
+                .map(SubscriptionTemplate::getCategory)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 }

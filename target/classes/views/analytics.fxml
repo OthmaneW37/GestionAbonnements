@@ -37,9 +37,9 @@
             </HBox>
             <VBox spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#goToDashboard" styleClass="nav-button" text="Dashboard" />
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="nav-button, nav-button-active" text="Analytics" />
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="nav-button" text="Paramètres" />
+                  <Button maxWidth="Infinity" onAction="#goToDashboard" styleClass="nav-button" text="Dashboard" />
+                  <Button maxWidth="Infinity" styleClass="nav-button-active" text="Analytics" />
+                  <Button maxWidth="Infinity" onAction="#onSettingsClick" styleClass="nav-button" text="Paramètres" />
                </children>
                <padding>
                   <Insets top="20.0" />
@@ -71,7 +71,7 @@
                   </children>
                </VBox>
                <Region HBox.hgrow="ALWAYS" />
-               <TextField promptText="Rechercher..." styleClass="search-field" prefWidth="300.0" />
+               <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-field" prefWidth="300.0" />
             </children>
          </HBox>
          

@@ -7,23 +7,30 @@ import java.time.format.DateTimeParseException;
  * Représente un abonnement utilisateur.
  * Gère la sérialisation vers/depuis le format CSV.
  */
-public class
-Abonnement {
+public class Abonnement {
     private int id;
     private String nom;
     private double prix;
     private LocalDate dateDebut;
     private String frequence; // "Mensuel" ou "Annuel"
     private String categorie;
+    private int userId;
 
     // Constructeur complet
-    public Abonnement(int id, String nom, double prix, LocalDate dateDebut, String frequence, String categorie) {
+    public Abonnement(int id, String nom, double prix, LocalDate dateDebut, String frequence, String categorie,
+            int userId) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
         this.dateDebut = dateDebut;
         this.frequence = frequence;
         this.categorie = categorie;
+        this.userId = userId;
+    }
+
+    // Constructeur sans userId (compatibilité temporaire ou anciens tests)
+    public Abonnement(int id, String nom, double prix, LocalDate dateDebut, String frequence, String categorie) {
+        this(id, nom, prix, dateDebut, frequence, categorie, 0);
     }
 
     // Getters et Setters
@@ -73,6 +80,14 @@ Abonnement {
 
     public void setCategorie(String categorie) {
         this.categorie = categorie;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override
