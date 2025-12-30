@@ -11,7 +11,11 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<<<<<<< HEAD
 <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" styleClass="modal-root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.emsi.subtracker.views.UserProfileController">
+=======
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" style="-fx-background-color: #1E1E1E;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.emsi.subtracker.views.UserProfileController">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
     <padding>
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
@@ -26,20 +30,38 @@
                 <Circle centerX="40" centerY="40" radius="40" />
             </clip>
         </ImageView>
+<<<<<<< HEAD
         <Label fx:id="lblUsername" text="Username" styleClass="modal-title" />
         <Label fx:id="lblEmail" text="email@example.com" styleClass="form-label" />
+=======
+        <Label fx:id="lblUsername" text="Username" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <Label fx:id="lblEmail" text="email@example.com" textFill="#bbbbbb">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
     </VBox>
 
     <Separator opacity="0.1" />
 
     <!-- Stats -->
     <VBox spacing="15.0">
+<<<<<<< HEAD
         <Label text="Mes Abonnements" styleClass="text-accent">
+=======
+        <Label text="Mes Abonnements" textFill="#6c63ff">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
         
+<<<<<<< HEAD
         <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="card" style="-fx-padding: 15;">
             <Label text="Total Actifs:" styleClass="text-primary" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             <Label fx:id="lblTotalSubscriptions" text="0" styleClass="text-primary" style="-fx-font-weight: bold;"/>
@@ -48,11 +70,22 @@
         <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="card" style="-fx-padding: 15;">
             <Label text="Coût Mensuel:" styleClass="text-primary" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
             <Label fx:id="lblTotalCost" text="0.00 DH" styleClass="card-value-green" style="-fx-font-weight: bold;"/>
+=======
+        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #2D2D2D; -fx-background-radius: 10; -fx-padding: 15;">
+            <Label text="Total Actifs:" textFill="WHITE" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Label fx:id="lblTotalSubscriptions" text="0" textFill="WHITE" style="-fx-font-weight: bold;"/>
+        </HBox>
+
+        <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: #2D2D2D; -fx-background-radius: 10; -fx-padding: 15;">
+            <Label text="Coût Mensuel:" textFill="WHITE" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Label fx:id="lblTotalCost" text="0.00 DH" textFill="#4cff4c" style="-fx-font-weight: bold;"/>
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
         </HBox>
     </VBox>
     
     <Separator opacity="0.1" />
 
+<<<<<<< HEAD
     <!-- Theme Toggle -->
     <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="card" style="-fx-padding: 15;">
         <Label text="Mode Sombre" styleClass="text-primary" HBox.hgrow="ALWAYS" maxWidth="Infinity">
@@ -66,4 +99,7 @@
     <Separator opacity="0.1" />
 
     <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#closeWindow" styleClass="btn-secondary" text="Fermer" />
+=======
+    <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#closeWindow" style="-fx-background-color: #333; -fx-text-fill: white; -fx-background-radius: 5;" text="Fermer" />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
 </VBox>

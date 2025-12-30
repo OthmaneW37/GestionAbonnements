@@ -52,7 +52,11 @@
                   <Insets top="20.0" />
                </padding>
             </VBox>
+<<<<<<< HEAD
             <Label text="v1.0.2" styleClass="text-muted" VBox.vgrow="NEVER">
+=======
+            <Label text="v1.0.2" textFill="#555555" VBox.vgrow="NEVER">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                <padding>
                   <Insets bottom="20.0" left="20.0" />
                </padding>
@@ -63,49 +67,79 @@
    
    <!-- MAIN CONTENT -->
    <center>
+<<<<<<< HEAD
         <VBox BorderPane.alignment="CENTER">
             <padding>
                 <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
             </padding>
             <Label styleClass="text-header" text="Paramètres" />
             <Label styleClass="text-subheader" text="Personnalisez votre expérience." />
+=======
+        <VBox style="-fx-background-color: #121212;" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
+            <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Paramètres" />
+            <Label style="-fx-text-fill: #808080;" text="Personnalisez votre expérience." />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
             
             <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="settings-tab-pane" VBox.vgrow="ALWAYS">
                 <tabs>
                     <!-- COMPTE -->
                     <Tab text="Mon Compte">
                         <content>
+<<<<<<< HEAD
                             <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding:0;">
+=======
+                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                 <content>
                                     <VBox spacing="20.0">
                                         <padding>
                                             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                         </padding>
+<<<<<<< HEAD
                                         <Label text="Informations Personnelles" styleClass="text-accent">
+=======
+                                        <Label text="Informations Personnelles" textFill="#6c63ff">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                             <font>
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
                                         
                                         <VBox spacing="10.0">
+<<<<<<< HEAD
                                             <Label text="Nom d'utilisateur" styleClass="text-muted" />
                                             <TextField fx:id="usernameField" styleClass="text-input" />
                                             
                                             <Label text="Email" styleClass="text-muted" />
                                             <TextField fx:id="emailField" styleClass="text-input" />
+=======
+                                            <Label text="Nom d'utilisateur" textFill="#808080" />
+                                            <TextField fx:id="usernameField" style="-fx-background-color: #2D2D2D; -fx-text-fill: white;" />
+                                            
+                                            <Label text="Email" textFill="#808080" />
+                                            <TextField fx:id="emailField" style="-fx-background-color: #2D2D2D; -fx-text-fill: white;" />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                             
                                             <Button onAction="#onSaveAccount" styleClass="btn-primary" text="Sauvegarder les modifications" />
                                         </VBox>
                                         
                                         <Separator opacity="0.1" />
                                         
+<<<<<<< HEAD
                                         <Label text="Sécurité" styleClass="text-accent">
+=======
+                                        <Label text="Sécurité" textFill="#6c63ff">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                             <font>
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
                                         
                                         <HBox spacing="10.0" alignment="CENTER_LEFT">
+<<<<<<< HEAD
                                             <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" styleClass="text-input" HBox.hgrow="ALWAYS"/>
                                             <Button onAction="#onChangePassword" styleClass="btn-secondary" text="Changer MDP" />
                                         </HBox>
@@ -113,12 +147,25 @@
                                         <Separator opacity="0.1" />
                                         
                                         <Label text="Actions" styleClass="text-accent">
+=======
+                                            <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" style="-fx-background-color: #2D2D2D; -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
+                                            <Button onAction="#onChangePassword" style="-fx-background-color: #444; -fx-text-fill: white;" text="Changer MDP" />
+                                        </HBox>
+            
+                                        <Separator opacity="0.1" />
+                                        
+                                        <Label text="Actions" textFill="#6c63ff">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                             <font>
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
                                         
+<<<<<<< HEAD
                                         <Button onAction="#onLogout" styleClass="btn-filled-danger" text="Se Déconnecter" />
+=======
+                                        <Button onAction="#onLogout" styleClass="btn-primary" style="-fx-background-color: #ff4c4c;" text="Se Déconnecter" />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                         
                                         <Separator opacity="0.1" />
                                         
@@ -127,8 +174,13 @@
                                                 <Font name="System Bold" size="18.0" />
                                             </font>
                                         </Label>
+<<<<<<< HEAD
                                         <Label text="La suppression du compte est irréversible et effacera toutes vos données." styleClass="text-muted" wrapText="true"/>
                                         <Button onAction="#onDeleteAccount" styleClass="btn-danger" text="Supprimer mon compte" />
+=======
+                                        <Label text="La suppression du compte est irréversible et effacera toutes vos données." textFill="#808080" wrapText="true"/>
+                                        <Button onAction="#onDeleteAccount" style="-fx-background-color: transparent; -fx-border-color: #ff4c4c; -fx-text-fill: #ff4c4c;" text="Supprimer mon compte" />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                     </VBox>
                                 </content>
                             </ScrollPane>
@@ -142,22 +194,38 @@
                                 <padding>
                                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                 </padding>
+<<<<<<< HEAD
                                 <Label text="Préférences de Devise" styleClass="text-accent">
+=======
+                                <Label text="Préférences de Devise" textFill="#6c63ff">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
                                 </Label>
                                 <VBox spacing="10.0">
+<<<<<<< HEAD
                                     <RadioButton fx:id="currencyDH" text="Dirham Marocain (DH)" styleClass="text-primary" selected="true">
+=======
+                                    <RadioButton fx:id="currencyDH" text="Dirham Marocain (DH)" textFill="WHITE" selected="true">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                         <toggleGroup>
                                             <ToggleGroup fx:id="currencyGroup" />
                                         </toggleGroup>
                                     </RadioButton>
+<<<<<<< HEAD
                                     <RadioButton fx:id="currencyEUR" text="Euro (€)" styleClass="text-primary" toggleGroup="$currencyGroup" />
                                     <RadioButton fx:id="currencyUSD" text="Dollar ($)" styleClass="text-primary" toggleGroup="$currencyGroup" />
                                 </VBox>
                                 <Button text="Confirmer la devise" onAction="#onConfirmCurrency" styleClass="btn-primary" />
                                 <Label text="(Les prix seront convertis automatiquement sur le Dashboard)" styleClass="text-muted" />
+=======
+                                    <RadioButton fx:id="currencyEUR" text="Euro (€)" textFill="WHITE" toggleGroup="$currencyGroup" />
+                                    <RadioButton fx:id="currencyUSD" text="Dollar ($)" textFill="WHITE" toggleGroup="$currencyGroup" />
+                                </VBox>
+                                <Button text="Confirmer la devise" onAction="#onConfirmCurrency" styleClass="btn-primary" />
+                                <Label text="(Les prix seront convertis automatiquement sur le Dashboard)" textFill="#666" />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                             </VBox>
                          </content>
                     </Tab>
@@ -169,7 +237,11 @@
                                 <padding>
                                     <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                                 </padding>
+<<<<<<< HEAD
                                 <Label text="Gestion des Données" styleClass="text-accent">
+=======
+                                <Label text="Gestion des Données" textFill="#6c63ff">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                     <font>
                                         <Font name="System Bold" size="18.0" />
                                     </font>
@@ -177,12 +249,17 @@
                                 
                                 <HBox spacing="20.0" alignment="CENTER_LEFT">
                                     <VBox spacing="5.0">
+<<<<<<< HEAD
                                         <Button onAction="#onExportData" styleClass="btn-filled-teal" text="Exporter en CSV" />
                                         <Label text="Télécharger une copie de vos abonnements." styleClass="text-muted" wrapText="true" maxWidth="200"/>
                                     </VBox>
                                     <VBox spacing="5.0">
                                         <Button onAction="#onImportData" styleClass="btn-filled-purple" text="Importer data_abonnements.csv" />
                                         <Label text="Charger les abonnements depuis la racine." styleClass="text-muted" wrapText="true" maxWidth="200"/>
+=======
+                                        <Button onAction="#onExportData" style="-fx-background-color: #03DAC6; -fx-text-fill: black; -fx-font-weight: bold;" text="Exporter en CSV" />
+                                        <Label text="Télécharger une copie de vos abonnements." textFill="#808080" wrapText="true" maxWidth="200"/>
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                     </VBox>
                                 </HBox>
                             </VBox>
@@ -204,13 +281,22 @@
                                          <Circle centerX="50" centerY="50" radius="50" />
                                      </clip>
                                  </ImageView>
+<<<<<<< HEAD
                                 <Label text="SubTracker" styleClass="text-header">
+=======
+                                <Label text="SubTracker" textFill="WHITE">
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                                     <font>
                                         <Font name="System Bold" size="24.0" />
                                     </font>
                                 </Label>
+<<<<<<< HEAD
                                 <Label text="Version 1.0.2" styleClass="text-muted" />
                                 <Label text="Développé par Othmane , Rayane et Yassine pour la gestion de vos abonnements." styleClass="text-muted" />
+=======
+                                <Label text="Version 1.0.2" textFill="#808080" />
+                                <Label text="Développé par Othmane , Rayane et Yassine pour la gestion de vos abonnements." textFill="#808080" />
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
                             </VBox>
                          </content>
                     </Tab>

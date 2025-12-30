@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<<<<<<< HEAD
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -58,3 +59,44 @@
 
     <Hyperlink onAction="#goToRegister" text="Pas de compte ? Inscrivez-vous !" textFill="#6c63ff" />
 </VBox>
+=======
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+           fx:controller="com.emsi.subtracker.controllers.LoginController"
+           stylesheets="@../styles/style.css"
+           styleClass="main-container">
+    
+    <VBox alignment="CENTER" spacing="20" maxWidth="450" maxHeight="550" styleClass="card">
+        <padding>
+            <Insets top="50" right="50" bottom="50" left="50"/>
+        </padding>
+
+        <Label text="SUB TRACKER" styleClass="brand-label"/>
+        
+        <Label text="Welcome Back" styleClass="page-title" style="-fx-font-size: 20px;"/>
+        <Label text="Login to continue" styleClass="page-subtitle"/>
+
+        <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="USERNAME" style="-fx-font-weight:bold;"/>
+            <TextField fx:id="usernameField" promptText="e.g. admin" styleClass="search-bar"/>
+        </VBox>
+
+        <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="PASSWORD" style="-fx-font-weight:bold;"/>
+            <PasswordField fx:id="passwordField" promptText="••••••••" styleClass="search-bar"/>
+        </VBox>
+
+        <VBox spacing="10">
+            <Button text="SIGN IN" maxWidth="Infinity" styleClass="action-button-primary" onAction="#handleLogin"/>
+            <Button text="CREATE ACCOUNT" maxWidth="Infinity" styleClass="action-button-secondary" onAction="#handleRegister"/>
+        </VBox>
+        
+        <Label fx:id="errorLabel" text="" textFill="#ff6b6b" visible="false"/>
+    </VBox>
+</StackPane>
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd

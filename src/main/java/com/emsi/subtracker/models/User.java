@@ -4,6 +4,7 @@ public class User {
     private int id;
     private String username;
     private String password;
+<<<<<<< HEAD
     private String email;
 
     public User() {
@@ -20,6 +21,18 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+=======
+
+    public User(int id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
     }
 
     public int getId() {
@@ -45,6 +58,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+<<<<<<< HEAD
 
     public String getEmail() {
         return email;
@@ -62,4 +76,6 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+=======
+>>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
 }
