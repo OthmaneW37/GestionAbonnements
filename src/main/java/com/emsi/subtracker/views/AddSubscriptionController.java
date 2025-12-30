@@ -2,7 +2,6 @@ package com.emsi.subtracker.views;
 
 import com.emsi.subtracker.models.Abonnement;
 import com.emsi.subtracker.services.SubscriptionService;
-import com.emsi.subtracker.utils.SceneManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -10,7 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
@@ -44,7 +42,16 @@ public class AddSubscriptionController implements Initializable {
 
         // Date par défaut = aujourd'hui
         dateDebut.setValue(LocalDate.now());
+
+        // Platform.runLater to ensure Scene is not null
+        javafx.application.Platform.runLater(() -> {
+            if (txtNom.getScene() != null) {
+                com.emsi.subtracker.utils.ThemeManager.applyTheme(txtNom.getScene());
+            }
+        });
     }
+
+    private Abonnement currentAbonnement;
 
     @FXML
     protected void onBtnEnregistrerClick() {
@@ -57,12 +64,21 @@ public class AddSubscriptionController implements Initializable {
                 String frequence = cmbFrequence.getValue();
                 String categorie = cmbCategorie.getValue();
 
-                // Génération d'un ID (timestamp simple pour l'exemple)
-                int id = (int) (System.currentTimeMillis() % 100000);
-
-                // 2. Création et sauvegarde
-                Abonnement nouvelAbonnement = new Abonnement(id, nom, prix, date, frequence, categorie);
-                service.add(nouvelAbonnement);
+                if (currentAbonnement != null) {
+                    // Update existing
+                    currentAbonnement.setNom(nom);
+                    currentAbonnement.setPrix(prix);
+                    currentAbonnement.setDateDebut(date);
+                    currentAbonnement.setFrequence(frequence);
+                    currentAbonnement.setCategorie(categorie);
+                    service.update(currentAbonnement);
+                } else {
+                    // Create new
+                    // Génération d'un ID (timestamp simple pour l'exemple)
+                    int id = (int) (System.currentTimeMillis() % 100000);
+                    Abonnement nouvelAbonnement = new Abonnement(id, nom, prix, date, frequence, categorie);
+                    service.add(nouvelAbonnement);
+                }
 
                 // 3. Retour au Dashboard
                 retourAuDashboard();
@@ -73,6 +89,17 @@ public class AddSubscriptionController implements Initializable {
         }
     }
 
+    public void setAbonnement(Abonnement abonnement) {
+        this.currentAbonnement = abonnement;
+        if (abonnement != null) {
+            txtNom.setText(abonnement.getNom());
+            txtPrix.setText(String.valueOf(abonnement.getPrix()));
+            dateDebut.setValue(abonnement.getDateDebut());
+            cmbFrequence.setValue(abonnement.getFrequence());
+            cmbCategorie.setValue(abonnement.getCategorie());
+        }
+    }
+
     @FXML
     protected void onBtnAnnulerClick() {
         retourAuDashboard();
@@ -80,7 +107,7 @@ public class AddSubscriptionController implements Initializable {
 
     private void retourAuDashboard() {
         Stage currentStage = (Stage) txtNom.getScene().getWindow();
-        SceneManager.changeScene(currentStage, "dashboard.fxml");
+        currentStage.close();
     }
 
     private boolean validerChamps() {

@@ -1,0 +1,31 @@
+@startuml DiagrammeSequence_GestionAbonnement
+
+title Séquence - Gestion d'Abonnement
+
+actor Utilisateur
+participant "Interface" as UI
+participant "Système" as System
+database "Base de données" as DB
+
+== Ajouter un abonnement ==
+
+Utilisateur -> UI : Cliquer "Ajouter"
+UI -> Utilisateur : Afficher formulaire
+
+Utilisateur -> UI : Remplir informations\n(nom, prix, date, fréquence, catégorie)
+UI -> System : Créer abonnement
+System -> DB : Enregistrer
+DB --> System : Confirmation
+System --> UI : Succès
+UI --> Utilisateur : Afficher nouvel abonnement
+
+== Consulter les abonnements ==
+
+Utilisateur -> UI : Accéder au dashboard
+UI -> System : Demander liste
+System -> DB : Récupérer abonnements
+DB --> System : Liste d'abonnements
+System --> UI : Données + Total mensuel
+UI --> Utilisateur : Afficher cartes
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml DiagrammeSequence_Authentification
+
+title Séquence - Authentification
+
+actor Utilisateur
+participant "Interface Login" as UI
+participant "Système" as System
+database "Base de données" as DB
+
+Utilisateur -> UI : Saisit identifiants
+UI -> System : Valider credentials
+System -> DB : Vérifier utilisateur
+DB --> System : Utilisateur trouvé
+System --> UI : Authentification OK
+UI --> Utilisateur : Accès au dashboard
+
+@enduml

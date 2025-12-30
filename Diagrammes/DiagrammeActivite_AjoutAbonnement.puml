@@ -1,0 +1,26 @@
+@startuml DiagrammeActivite_AjoutAbonnement
+
+title Activité - Ajout d'un Abonnement
+
+start
+
+:Cliquer sur "Ajouter";
+
+:Remplir le formulaire;
+
+if (Tous les champs remplis ?) then (oui)
+    if (Prix valide ?) then (oui)
+        :Enregistrer l'abonnement;
+        :Actualiser la liste;
+        :Afficher message de succès;
+        stop
+    else (non)
+        :Afficher erreur "Prix invalide";
+        stop
+    endif
+else (non)
+    :Afficher erreur "Champs manquants";
+    stop
+endif
+
+@enduml

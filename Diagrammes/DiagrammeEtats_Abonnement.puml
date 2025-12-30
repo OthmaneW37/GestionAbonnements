@@ -1,0 +1,24 @@
+@startuml DiagrammeEtats_Abonnement
+
+title États d'un Abonnement
+
+[*] --> Actif : Créer abonnement
+
+state Actif {
+    Actif : L'abonnement est visible
+    Actif : et comptabilisé
+}
+
+Actif --> EnModification : Modifier
+EnModification --> Actif : Enregistrer
+
+Actif --> Supprimé : Supprimer
+
+Supprimé --> [*]
+
+note right of Actif
+    État principal où
+    l'abonnement est fonctionnel
+end note
+
+@enduml

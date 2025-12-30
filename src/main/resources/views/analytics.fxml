@@ -37,15 +37,15 @@
             </HBox>
             <VBox spacing="10.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#goToDashboard" styleClass="nav-button" text="Dashboard" />
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="nav-button, nav-button-active" text="Analytics" />
-                  <Button maxWidth="Infinity" mnemonicParsing="false" styleClass="nav-button" text="Paramètres" />
+                  <Button maxWidth="Infinity" onAction="#goToDashboard" styleClass="nav-button" text="Dashboard" />
+                  <Button maxWidth="Infinity" styleClass="nav-button-active" text="Analytics" />
+                  <Button maxWidth="Infinity" onAction="#onSettingsClick" styleClass="nav-button" text="Paramètres" />
                </children>
                <padding>
                   <Insets top="20.0" />
                </padding>
             </VBox>
-            <Label text="v1.0.2" textFill="#555555" VBox.vgrow="NEVER">
+            <Label text="v1.0.2" styleClass="text-muted" VBox.vgrow="NEVER">
                <padding>
                   <Insets bottom="20.0" left="20.0" />
                </padding>
@@ -56,7 +56,7 @@
    
    <!-- MAIN CONTENT -->
    <center>
-      <VBox spacing="30.0" style="-fx-background-color: #121212;" BorderPane.alignment="CENTER">
+      <VBox spacing="30.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
          </padding>
@@ -66,12 +66,12 @@
             <children>
                <VBox>
                   <children>
-                     <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Statistiques" />
-                     <Label style="-fx-text-fill: #808080;" text="Analysez la répartition de vos dépenses." />
+                     <Label styleClass="text-header" text="Statistiques" />
+                     <Label styleClass="text-subheader" text="Analysez la répartition de vos dépenses." />
                   </children>
                </VBox>
                <Region HBox.hgrow="ALWAYS" />
-               <TextField promptText="Rechercher..." styleClass="search-field" prefWidth="300.0" />
+               <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-field" prefWidth="300.0" />
             </children>
          </HBox>
          
@@ -98,10 +98,10 @@
                      <Label styleClass="card-title" text="Coût Mensuel par Service" />
                      <BarChart fx:id="barChartCosts" legendVisible="false" VBox.vgrow="ALWAYS">
                        <xAxis>
-                         <CategoryAxis label="Service" side="BOTTOM" tickLabelFill="WHITE" />
+                         <CategoryAxis label="Service" side="BOTTOM" />
                        </xAxis>
                        <yAxis>
-                         <NumberAxis label="Prix (DH)" side="LEFT" tickLabelFill="WHITE" />
+                         <NumberAxis label="Prix (DH)" side="LEFT" />
                        </yAxis>
                      </BarChart>
                   </children>

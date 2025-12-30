@@ -10,7 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
+
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -30,17 +30,55 @@ public class AnalyticsController implements Initializable {
     @FXML
     private BarChart<String, Number> barChartCosts;
 
+    @FXML
+    private javafx.scene.control.TextField searchField;
+
     private final SubscriptionService service = new SubscriptionService();
+    private List<Abonnement> allSubscriptions;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loadPieChartData();
-        loadBarChartData();
+        allSubscriptions = service.getAll();
+
+        loadPieChartData(allSubscriptions);
+        loadBarChartData(allSubscriptions);
+
+        if (searchField != null) {
+            searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+                filterCharts(newVal);
+            });
+        }
+
+        // Apply Theme
+        javafx.application.Platform.runLater(() -> {
+            if (pieChartCategories.getScene() != null) {
+                com.emsi.subtracker.utils.ThemeManager.applyTheme(pieChartCategories.getScene());
+            }
+        });
+    }
+
+    private void filterCharts(String query) {
+        if (allSubscriptions == null)
+            return;
+
+        String lowerQuery = (query != null) ? query.toLowerCase() : "";
+        List<Abonnement> filtered = allSubscriptions.stream()
+                .filter(sub -> sub.getNom().toLowerCase().contains(lowerQuery))
+                .collect(Collectors.toList());
+
+        loadPieChartData(filtered);
+        loadBarChartData(filtered);
     }
 
     private void loadPieChartData() {
-        List<Abonnement> list = service.getAll();
+        loadPieChartData(this.allSubscriptions);
+    } // overload for refresh
 
+    private void loadBarChartData() {
+        loadBarChartData(this.allSubscriptions);
+    } // overload for refresh
+
+    private void loadPieChartData(List<Abonnement> list) {
         // Group by category and sum counts (or costs?)
         // Let's visualize Cost Distribution by Category
         Map<String, Double> costByCategory = list.stream()
@@ -57,12 +95,10 @@ public class AnalyticsController implements Initializable {
         });
 
         pieChartCategories.setData(pieData);
-        // Title handled in FXML
     }
 
-    private void loadBarChartData() {
-        List<Abonnement> list = service.getAll();
-
+    private void loadBarChartData(List<Abonnement> list) {
+        barChartCosts.getData().clear();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Coût Mensuel");
 
@@ -78,7 +114,17 @@ public class AnalyticsController implements Initializable {
     protected void goToDashboard() {
         try {
             Stage currentStage = (Stage) pieChartCategories.getScene().getWindow();
-            SceneManager.changeScene(currentStage, "dashboard.fxml");
+            SceneManager.switchScene(currentStage, "dashboard.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void onSettingsClick() {
+        try {
+            Stage currentStage = (Stage) pieChartCategories.getScene().getWindow();
+            SceneManager.switchScene(currentStage, "settings.fxml");
         } catch (Exception e) {
             e.printStackTrace();
         }

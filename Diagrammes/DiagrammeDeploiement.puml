@@ -1,0 +1,25 @@
+@startuml DiagrammeDeploiement
+
+title Diagramme de Déploiement
+
+node "Ordinateur Client" {
+    artifact "Application\nJavaFX" as App
+}
+
+node "Serveur" {
+    database "SQL Server\n(Base de données)" as DB
+}
+
+App --> DB : JDBC\n(connexion réseau)
+
+note bottom of App
+    - Java 21+
+    - Interface graphique
+end note
+
+note bottom of DB
+    - Tables: users, subscriptions
+    - Port: 1433
+end note
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml DiagrammeClasses
+
+title Diagramme de Classes Simplifié - Gestion d'Abonnements
+
+' ==== ENTITÉS PRINCIPALES ====
+
+class User {
+    - id: int
+    - username: String
+    - email: String
+    - password: String
+    --
+    + authenticate()
+    + register()
+}
+
+class Abonnement {
+    - id: int
+    - nom: String
+    - prix: double
+    - dateDebut: Date
+    - frequence: String
+    - categorie: String
+    --
+    + calculerCoutMensuel(): double
+}
+
+' ==== RELATIONS ====
+User "1" -- "0..*" Abonnement : possède >
+
+note right of User
+    L'utilisateur peut s'inscrire,
+    se connecter et gérer
+    ses abonnements
+end note
+
+note right of Abonnement
+    Fréquence: "Mensuel" ou "Annuel"
+    Catégories: Divertissement, Travail,
+    Sport, Musique, Autre
+end note
+
+@enduml

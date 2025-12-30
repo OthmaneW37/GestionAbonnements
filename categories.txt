@@ -1,0 +1,5 @@
+Divertissement
+Travail
+Sport
+Musique
+Autre

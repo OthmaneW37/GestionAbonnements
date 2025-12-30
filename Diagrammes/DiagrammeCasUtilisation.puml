@@ -1,0 +1,44 @@
+@startuml DiagrammeCasUtilisation
+
+left to right direction
+skinparam packageStyle rectangle
+
+title Diagramme de Cas d'Utilisation - Gestion d'Abonnements
+
+actor "Utilisateur" as User
+
+rectangle "Application GestionAbonnements" {
+    
+    usecase "S'inscrire" as UC1
+    usecase "Se connecter" as UC2
+    
+    usecase "Ajouter un abonnement" as UC3
+    usecase "Consulter ses abonnements" as UC4
+    usecase "Modifier un abonnement" as UC5
+    usecase "Supprimer un abonnement" as UC6
+    
+    usecase "Voir les statistiques" as UC7
+}
+
+' Relations
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+
+' Préconditions
+UC3 ..> UC2 : <<requires>>
+UC4 ..> UC2 : <<requires>>
+UC5 ..> UC2 : <<requires>>
+UC6 ..> UC2 : <<requires>>
+UC7 ..> UC2 : <<requires>>
+
+note right of UC7
+    Affiche le coût total mensuel
+    et la répartition par catégorie
+end note
+
+@enduml
