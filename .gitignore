@@ -21,6 +21,7 @@ buildNumber.properties
 
 # Sensitive Files - Database Configuration
 **/database.properties
+**/EmailConfig.java
 *.env
 *.env.local
 .env
