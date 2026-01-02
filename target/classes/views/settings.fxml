@@ -1,308 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.shape.Circle?>
 
-<BorderPane prefHeight="768.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.emsi.subtracker.views.SettingsController">
-   
-   <!-- SIDEBAR -->
-   <left>
-      <VBox prefWidth="250.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-         <children>
-            <HBox alignment="CENTER_LEFT" spacing="15">
-               <padding>
-                  <Insets left="20.0" top="30.0" bottom="30.0" />
-               </padding>
-               <children>
-                  <javafx.scene.image.ImageView fitHeight="50.0" fitWidth="50.0" preserveRatio="true">
-                     <image>
-                        <javafx.scene.image.Image url="@../images/logo.jpg" />
-                     </image>
-                     <clip>
-                        <javafx.scene.shape.Circle centerX="25" centerY="25" radius="25" />
-                     </clip>
-                  </javafx.scene.image.ImageView>
-                  <Label styleClass="app-title" style="-fx-padding: 0;" text="SubTracker" />
-               </children>
-            </HBox>
-            <VBox spacing="10.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <Button maxWidth="Infinity" onAction="#goToDashboard" styleClass="nav-button" text="Dashboard" />
-                  <Button maxWidth="Infinity" onAction="#goToAnalytics" styleClass="nav-button" text="Analytics" />
-                  <Button maxWidth="Infinity" styleClass="nav-button-active" text="Paramètres" />
-               </children>
-               <padding>
-                  <Insets top="20.0" />
-               </padding>
-            </VBox>
-<<<<<<< HEAD
-            <Label text="v1.0.2" styleClass="text-muted" VBox.vgrow="NEVER">
-=======
-            <Label text="v1.0.2" textFill="#555555" VBox.vgrow="NEVER">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-               <padding>
-                  <Insets bottom="20.0" left="20.0" />
-               </padding>
-            </Label>
-         </children>
-      </VBox>
-   </left>
-   
-   <!-- MAIN CONTENT -->
-   <center>
-<<<<<<< HEAD
-        <VBox BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-            </padding>
-            <Label styleClass="text-header" text="Paramètres" />
-            <Label styleClass="text-subheader" text="Personnalisez votre expérience." />
-=======
-        <VBox style="-fx-background-color: #121212;" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-            </padding>
-            <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="Paramètres" />
-            <Label style="-fx-text-fill: #808080;" text="Personnalisez votre expérience." />
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.emsi.subtracker.controllers.SettingsController"
+            styleClass="bg-primary"
+            prefHeight="768" prefWidth="1280">
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox prefWidth="260" spacing="0" styleClass="sidebar">
+            <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
             
-            <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="settings-tab-pane" VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER" spacing="15">
+                <padding><Insets bottom="20"/></padding>
+                
+                <ImageView fitHeight="50.0" fitWidth="50.0" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/logo.jpg"/>
+                    </image>
+                    <clip>
+                        <Circle centerX="25" centerY="25" radius="25"/>
+                    </clip>
+                </ImageView>
+                
+                <Label text="SubTracker" styleClass="text-header"/>
+                <Separator styleClass="separator-horizontal" prefWidth="220"/>
+            </VBox>
+            
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <Button text="Dashboard" onAction="#goToDashboard" maxWidth="Infinity"
+                       style="-fx-background-color: transparent; -fx-text-fill: #A0A0A0; -fx-font-size: 14; -fx-background-radius: 8; -fx-padding: 12; -fx-cursor: hand; -fx-alignment: CENTER-LEFT;"/>
+                <Button text="Analytics" onAction="#goToAnalytics" maxWidth="Infinity"
+                       style="-fx-background-color: transparent; -fx-text-fill: #A0A0A0; -fx-font-size: 14; -fx-background-radius: 8; -fx-padding: 12; -fx-cursor: hand; -fx-alignment: CENTER-LEFT;"/>
+                <Button text="Paramètres" maxWidth="Infinity" styleClass="nav-button-active"/>
+                
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label text="Version 1.0.2" style="-fx-text-fill: #555; -fx-font-size: 11;"/>
+            </VBox>
+        </VBox>
+    </left>
+    
+    <!-- CONTENU -->
+    <center>
+        <VBox spacing="20">
+            <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+            
+            <!-- HEADER -->
+            <VBox spacing="5">
+                <Label text="Paramètres" styleClass="text-title-large"/>
+                <Label text="Gérez votre compte et préférences" styleClass="text-subheader"/>
+            </VBox>
+            
+            <!-- TABS -->
+            <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                <styleClass>
+                    <String fx:value="settings-tab-pane"/>
+                </styleClass>
                 <tabs>
                     <!-- COMPTE -->
                     <Tab text="Mon Compte">
-                        <content>
-<<<<<<< HEAD
-                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding:0;">
-=======
-                            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                <content>
-                                    <VBox spacing="20.0">
-                                        <padding>
-                                            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                                        </padding>
-<<<<<<< HEAD
-                                        <Label text="Informations Personnelles" styleClass="text-accent">
-=======
-                                        <Label text="Informations Personnelles" textFill="#6c63ff">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                            <font>
-                                                <Font name="System Bold" size="18.0" />
-                                            </font>
-                                        </Label>
-                                        
-                                        <VBox spacing="10.0">
-<<<<<<< HEAD
-                                            <Label text="Nom d'utilisateur" styleClass="text-muted" />
-                                            <TextField fx:id="usernameField" styleClass="text-input" />
-                                            
-                                            <Label text="Email" styleClass="text-muted" />
-                                            <TextField fx:id="emailField" styleClass="text-input" />
-=======
-                                            <Label text="Nom d'utilisateur" textFill="#808080" />
-                                            <TextField fx:id="usernameField" style="-fx-background-color: #2D2D2D; -fx-text-fill: white;" />
-                                            
-                                            <Label text="Email" textFill="#808080" />
-                                            <TextField fx:id="emailField" style="-fx-background-color: #2D2D2D; -fx-text-fill: white;" />
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                            
-                                            <Button onAction="#onSaveAccount" styleClass="btn-primary" text="Sauvegarder les modifications" />
-                                        </VBox>
-                                        
-                                        <Separator opacity="0.1" />
-                                        
-<<<<<<< HEAD
-                                        <Label text="Sécurité" styleClass="text-accent">
-=======
-                                        <Label text="Sécurité" textFill="#6c63ff">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                            <font>
-                                                <Font name="System Bold" size="18.0" />
-                                            </font>
-                                        </Label>
-                                        
-                                        <HBox spacing="10.0" alignment="CENTER_LEFT">
-<<<<<<< HEAD
-                                            <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" styleClass="text-input" HBox.hgrow="ALWAYS"/>
-                                            <Button onAction="#onChangePassword" styleClass="btn-secondary" text="Changer MDP" />
-                                        </HBox>
-             
-                                        <Separator opacity="0.1" />
-                                        
-                                        <Label text="Actions" styleClass="text-accent">
-=======
-                                            <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" style="-fx-background-color: #2D2D2D; -fx-text-fill: white;" HBox.hgrow="ALWAYS"/>
-                                            <Button onAction="#onChangePassword" style="-fx-background-color: #444; -fx-text-fill: white;" text="Changer MDP" />
-                                        </HBox>
-            
-                                        <Separator opacity="0.1" />
-                                        
-                                        <Label text="Actions" textFill="#6c63ff">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                            <font>
-                                                <Font name="System Bold" size="18.0" />
-                                            </font>
-                                        </Label>
-                                        
-<<<<<<< HEAD
-                                        <Button onAction="#onLogout" styleClass="btn-filled-danger" text="Se Déconnecter" />
-=======
-                                        <Button onAction="#onLogout" styleClass="btn-primary" style="-fx-background-color: #ff4c4c;" text="Se Déconnecter" />
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                        
-                                        <Separator opacity="0.1" />
-                                        
-                                        <Label text="Zone Danger" textFill="#ff4c4c">
-                                            <font>
-                                                <Font name="System Bold" size="18.0" />
-                                            </font>
-                                        </Label>
-<<<<<<< HEAD
-                                        <Label text="La suppression du compte est irréversible et effacera toutes vos données." styleClass="text-muted" wrapText="true"/>
-                                        <Button onAction="#onDeleteAccount" styleClass="btn-danger" text="Supprimer mon compte" />
-=======
-                                        <Label text="La suppression du compte est irréversible et effacera toutes vos données." textFill="#808080" wrapText="true"/>
-                                        <Button onAction="#onDeleteAccount" style="-fx-background-color: transparent; -fx-border-color: #ff4c4c; -fx-text-fill: #ff4c4c;" text="Supprimer mon compte" />
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+                            <styleClass>
+                                <String fx:value="bg-primary"/>
+                            </styleClass>
+                            <VBox spacing="25">
+                                <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                                
+                                <!-- Infos personnelles -->
+                                <VBox spacing="15">
+                                    <Label text="INFORMATIONS PERSONNELLES" styleClass="text-section-title"/>
+                                    
+                                    <VBox spacing="8">
+                                        <Label text="Nom d'utilisateur" styleClass="text-label-small"/>
+                                        <TextField fx:id="usernameField" styleClass="input-field"/>
                                     </VBox>
-                                </content>
-                            </ScrollPane>
-                        </content>
+                                    
+                                    <VBox spacing="8">
+                                        <Label text="Email" styleClass="text-label-small"/>
+                                        <TextField fx:id="emailField" styleClass="input-field"/>
+                                    </VBox>
+                                    
+                                    <Button text="Sauvegarder" onAction="#onSaveAccount" styleClass="button-action"/>
+                                </VBox>
+                                
+                                <Separator styleClass="separator-horizontal"/>
+                                
+                                <!-- Sécurité -->
+                                <VBox spacing="15">
+                                    <Label text="SÉCURITÉ" styleClass="text-section-title"/>
+                                    <HBox spacing="12" alignment="CENTER_LEFT">
+                                        <PasswordField fx:id="newPasswordField" promptText="Nouveau mot de passe" HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                                        <Button text="Changer" onAction="#onChangePassword" styleClass="button-secondary-action"/>
+                                    </HBox>
+                                </VBox>
+                                
+                                <Separator style="-fx-background-color: #333;"/>
+                                
+                                <!-- Actions -->
+                                <VBox spacing="12">
+                                    <Label text="ACTIONS" style="-fx-text-fill: #6C63FF; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                                    <Button text="Se Déconnecter" onAction="#onLogout"
+                                           style="-fx-background-color: #F59E0B; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12; -fx-cursor: hand;"/>
+                                </VBox>
+                                
+                                <Separator style="-fx-background-color: #333;"/>
+                                
+                                <!-- Zone danger -->
+                                <VBox spacing="12">
+                                    <Label text="ZONE DANGER" style="-fx-text-fill: #EF4444; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                                    <Label text="La suppression du compte est irréversible." style="-fx-text-fill: #A0A0A0; -fx-font-size: 12;" wrapText="true"/>
+                                    <Button text="Supprimer mon compte" onAction="#onDeleteAccount"
+                                           style="-fx-background-color: transparent; -fx-border-color: #EF4444; -fx-border-width: 2; -fx-border-radius: 8; -fx-text-fill: #EF4444; -fx-padding: 12; -fx-cursor: hand;"/>
+                                </VBox>
+                            </VBox>
+                        </ScrollPane>
                     </Tab>
                     
                     <!-- AFFICHAGE -->
                     <Tab text="Affichage">
-                         <content>
-                            <VBox spacing="20.0">
-                                <padding>
-                                    <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                                </padding>
-<<<<<<< HEAD
-                                <Label text="Préférences de Devise" styleClass="text-accent">
-=======
-                                <Label text="Préférences de Devise" textFill="#6c63ff">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                    <font>
-                                        <Font name="System Bold" size="18.0" />
-                                    </font>
-                                </Label>
-                                <VBox spacing="10.0">
-<<<<<<< HEAD
-                                    <RadioButton fx:id="currencyDH" text="Dirham Marocain (DH)" styleClass="text-primary" selected="true">
-=======
-                                    <RadioButton fx:id="currencyDH" text="Dirham Marocain (DH)" textFill="WHITE" selected="true">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                        <toggleGroup>
-                                            <ToggleGroup fx:id="currencyGroup" />
-                                        </toggleGroup>
-                                    </RadioButton>
-<<<<<<< HEAD
-                                    <RadioButton fx:id="currencyEUR" text="Euro (€)" styleClass="text-primary" toggleGroup="$currencyGroup" />
-                                    <RadioButton fx:id="currencyUSD" text="Dollar ($)" styleClass="text-primary" toggleGroup="$currencyGroup" />
-                                </VBox>
-                                <Button text="Confirmer la devise" onAction="#onConfirmCurrency" styleClass="btn-primary" />
-                                <Label text="(Les prix seront convertis automatiquement sur le Dashboard)" styleClass="text-muted" />
-=======
-                                    <RadioButton fx:id="currencyEUR" text="Euro (€)" textFill="WHITE" toggleGroup="$currencyGroup" />
-                                    <RadioButton fx:id="currencyUSD" text="Dollar ($)" textFill="WHITE" toggleGroup="$currencyGroup" />
-                                </VBox>
-                                <Button text="Confirmer la devise" onAction="#onConfirmCurrency" styleClass="btn-primary" />
-                                <Label text="(Les prix seront convertis automatiquement sur le Dashboard)" textFill="#666" />
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                            </VBox>
-                         </content>
-                    </Tab>
-                    
-                    <!-- DONNEES -->
-                    <Tab text="Données">
-                         <content>
-                            <VBox spacing="20.0">
-                                <padding>
-                                    <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                                </padding>
-<<<<<<< HEAD
-                                <Label text="Gestion des Données" styleClass="text-accent">
-=======
-                                <Label text="Gestion des Données" textFill="#6c63ff">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                    <font>
-                                        <Font name="System Bold" size="18.0" />
-                                    </font>
-                                </Label>
-                                
-                                <HBox spacing="20.0" alignment="CENTER_LEFT">
-                                    <VBox spacing="5.0">
-<<<<<<< HEAD
-                                        <Button onAction="#onExportData" styleClass="btn-filled-teal" text="Exporter en CSV" />
-                                        <Label text="Télécharger une copie de vos abonnements." styleClass="text-muted" wrapText="true" maxWidth="200"/>
-                                    </VBox>
-                                    <VBox spacing="5.0">
-                                        <Button onAction="#onImportData" styleClass="btn-filled-purple" text="Importer data_abonnements.csv" />
-                                        <Label text="Charger les abonnements depuis la racine." styleClass="text-muted" wrapText="true" maxWidth="200"/>
-=======
-                                        <Button onAction="#onExportData" style="-fx-background-color: #03DAC6; -fx-text-fill: black; -fx-font-weight: bold;" text="Exporter en CSV" />
-                                        <Label text="Télécharger une copie de vos abonnements." textFill="#808080" wrapText="true" maxWidth="200"/>
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                    </VBox>
+                        <VBox spacing="20" styleClass="bg-primary">
+                            <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                            
+                            <VBox spacing="15">
+                                <Label text="APPARENCE" styleClass="text-section-title"/>
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <ToggleButton fx:id="themeToggle" text="Mode Sombre" style="-fx-cursor: hand;"/>
                                 </HBox>
+                                <Separator styleClass="separator-horizontal"/>
+                                
+                                <Label text="DEVISE" styleClass="text-section-title"/>
+                                <VBox spacing="10">
+                                    <RadioButton fx:id="currencyDH" text="Dirham Marocain (DH)" selected="true" styleClass="settings-radio">
+                                        <toggleGroup><ToggleGroup fx:id="currencyGroup"/></toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="currencyEUR" text="Euro (€)" toggleGroup="$currencyGroup" styleClass="settings-radio"/>
+                                    <RadioButton fx:id="currencyUSD" text="Dollar ($)" toggleGroup="$currencyGroup" styleClass="settings-radio"/>
+                                </VBox>
+                                <Button text="Confirmer" onAction="#onConfirmCurrency" styleClass="button-action"/>
                             </VBox>
-                         </content>
+                        </VBox>
                     </Tab>
                     
-                    <!-- A PROPOS -->
-                    <Tab text="À Propos">
-                         <content>
-                            <VBox spacing="20.0" alignment="CENTER">
-                                <padding>
-                                    <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                                </padding>
-                                 <ImageView fitHeight="100.0" fitWidth="100.0" preserveRatio="true">
-                                     <image>
-                                         <Image url="@../images/logo.jpg" />
-                                     </image>
-                                     <clip>
-                                         <Circle centerX="50" centerY="50" radius="50" />
-                                     </clip>
-                                 </ImageView>
-<<<<<<< HEAD
-                                <Label text="SubTracker" styleClass="text-header">
-=======
-                                <Label text="SubTracker" textFill="WHITE">
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
-                                    <font>
-                                        <Font name="System Bold" size="24.0" />
-                                    </font>
-                                </Label>
-<<<<<<< HEAD
-                                <Label text="Version 1.0.2" styleClass="text-muted" />
-                                <Label text="Développé par Othmane , Rayane et Yassine pour la gestion de vos abonnements." styleClass="text-muted" />
-=======
-                                <Label text="Version 1.0.2" textFill="#808080" />
-                                <Label text="Développé par Othmane , Rayane et Yassine pour la gestion de vos abonnements." textFill="#808080" />
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
+                    <!-- DONNÉES -->
+                    <Tab text="Données">
+                        <VBox spacing="20" styleClass="bg-primary">
+                            <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+                            
+                            <VBox spacing="15">
+                                <Label text="GESTION DES DONNÉES" style="-fx-text-fill: #6C63FF; -fx-font-size: 12; -fx-font-weight: bold;"/>
+                                <Button text="Exporter en CSV" onAction="#onExportData"
+                                       style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 12; -fx-cursor: hand;"/>
+                                <Label text="Téléchargez une copie de vos abonnements" style="-fx-text-fill: #A0A0A0; -fx-font-size: 12;"/>
                             </VBox>
-                         </content>
+                        </VBox>
+                    </Tab>
+                    
+                    <!-- À PROPOS -->
+                    <Tab text="À Propos">
+                        <VBox spacing="15" alignment="CENTER" styleClass="bg-primary">
+                            <padding><Insets top="40" right="25" bottom="40" left="25"/></padding>
+                            <Label text="SubTracker" styleClass="text-title-medium"/>
+                            <Label text="Version 1.0.2" styleClass="text-subheader"/>
+                            <Label text="Développé par Othmane, Rayane et Yassine" styleClass="text-subheader" wrapText="true" textAlignment="CENTER"/>
+                        </VBox>
                     </Tab>
                 </tabs>
             </TabPane>
         </VBox>
-   </center>
-   
+    </center>
 </BorderPane>

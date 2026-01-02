@@ -16,9 +16,15 @@ public class Abonnement {
     private String categorie;
     private int userId;
 
-    // Constructeur complet
+    private Integer assignedToMemberId; // ID du membre famille (null = compte principal)
+
+    // Champs Branding (Nouveau)
+    private String logoUrl;
+    private String colorHex;
+
+    // Constructeur complet avec assignedToMemberId
     public Abonnement(int id, String nom, double prix, LocalDate dateDebut, String frequence, String categorie,
-            int userId) {
+            int userId, Integer assignedToMemberId) {
         this.id = id;
         this.nom = nom;
         this.prix = prix;
@@ -26,11 +32,21 @@ public class Abonnement {
         this.frequence = frequence;
         this.categorie = categorie;
         this.userId = userId;
+
+        this.assignedToMemberId = assignedToMemberId;
+        // Init default branding
+        this.colorHex = "#2D3436";
+    }
+
+    // Constructeur sans assignedToMemberId (par défaut null)
+    public Abonnement(int id, String nom, double prix, LocalDate dateDebut, String frequence, String categorie,
+            int userId) {
+        this(id, nom, prix, dateDebut, frequence, categorie, userId, null);
     }
 
     // Constructeur sans userId (compatibilité temporaire ou anciens tests)
     public Abonnement(int id, String nom, double prix, LocalDate dateDebut, String frequence, String categorie) {
-        this(id, nom, prix, dateDebut, frequence, categorie, 0);
+        this(id, nom, prix, dateDebut, frequence, categorie, 0, null);
     }
 
     // Getters et Setters
@@ -88,6 +104,30 @@ public class Abonnement {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public Integer getAssignedToMemberId() {
+        return assignedToMemberId;
+    }
+
+    public void setAssignedToMemberId(Integer assignedToMemberId) {
+        this.assignedToMemberId = assignedToMemberId;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
+    public String getColorHex() {
+        return colorHex;
+    }
+
+    public void setColorHex(String colorHex) {
+        this.colorHex = colorHex;
     }
 
     @Override

@@ -54,6 +54,32 @@
   -fx-text-fill: -fx-theme-text-primary;
 }
 
+.text-secondary {
+  -fx-text-fill: -fx-theme-text-secondary;
+}
+
+/* Background helper classes */
+.bg-primary {
+  -fx-background-color: -fx-theme-bg-primary;
+}
+
+.bg-secondary {
+  -fx-background-color: -fx-theme-bg-secondary;
+}
+
+.bg-tertiary {
+  -fx-background-color: -fx-theme-bg-tertiary;
+}
+
+.dark-tab-pane .tab-header-area .tab-header-background {
+  -fx-background-color: transparent;
+}
+
+.dark-tab-pane {
+  -fx-background-color: -fx-theme-bg-primary;
+}
+
+
 /* ================== SIDEBAR ================== */
 .sidebar {
   -fx-background-color: -fx-theme-bg-secondary;
@@ -255,7 +281,6 @@
 
 /* ================== SUBSCRIPTION CARDS ================== */
 .sub-card {
-<<<<<<< HEAD
   -fx-background-color: -fx-theme-bg-secondary;
   -fx-background-radius: 20;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
@@ -269,24 +294,6 @@
 .sub-card:hover {
   -fx-scale-x: 1.05;
   -fx-scale-y: 1.05;
-=======
-    -fx-background-color: #2D2D2D;
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
-    -fx-cursor: hand;
-    -fx-padding: 20;
-    -fx-min-width: 220;
-    -fx-max-width: 220;
-    -fx-min-height: 160;
-}
-
-.sub-card:hover {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-background-radius: 20;
-    /* Force redraw of radius */
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
 }
 
 .sub-card-title {
@@ -307,146 +314,115 @@
   -fx-font-size: 12px;
 }
 
-<<<<<<< HEAD
-/* BRAND COLORS - ALWAYS KEEP WHITE TEXT */
+/* BRAND COLORS */
 .brand-netflix {
   -fx-background-color: linear-gradient(to bottom right, #E50914, #222);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 .brand-spotify {
   -fx-background-color: linear-gradient(to bottom right, #1DB954, #191414);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 .brand-amazon {
   -fx-background-color: linear-gradient(to bottom right, #00A8E1, #000);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 .brand-apple {
   -fx-background-color: linear-gradient(to bottom right, #555555, #000);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 .brand-adobe {
   -fx-background-color: linear-gradient(to bottom right, #FF0000, #330000);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 .brand-basicfit {
   -fx-background-color: linear-gradient(to bottom right, #FE7000, #222);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 .brand-default {
-  -fx-background-color: linear-gradient(to bottom right, -fx-theme-bg-tertiary, #1a1a1a);
-=======
-/* BRAND COLORS */
-/* Note: We repeat border-radius here to ensure it's applied when the background changes */
-.brand-netflix {
-    -fx-background-color: linear-gradient(to bottom right, #E50914, #222);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-}
-
-.brand-spotify {
-    -fx-background-color: linear-gradient(to bottom right, #1DB954, #191414);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-}
-
-.brand-amazon {
-    -fx-background-color: linear-gradient(to bottom right, #00A8E1, #000);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-}
-
-.brand-apple {
-    -fx-background-color: linear-gradient(to bottom right, #555555, #000);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-}
-
-.brand-adobe {
-    -fx-background-color: linear-gradient(to bottom right, #FF0000, #330000);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-}
-
-.brand-basicfit {
-    -fx-background-color: linear-gradient(to bottom right, #FE7000, #222);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
-}
-
-.brand-default {
-    -fx-background-color: linear-gradient(to bottom right, #444, #1a1a1a);
-    -fx-background-radius: 20;
-    -fx-background-insets: 0;
+  -fx-background-color: linear-gradient(to bottom right, #444, #1a1a1a);
+  -fx-background-radius: 20;
+  -fx-background-insets: 0;
 }
 
 /* ================== WIZARD STYLING ================== */
 
 .modal-root {
-    -fx-background-color: #121212;
+  -fx-background-color: #121212;
 }
 
 .wizard-step-title {
-    -fx-text-fill: white;
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
+  -fx-text-fill: white;
+  -fx-font-size: 22px;
+  -fx-font-weight: bold;
 }
 
 .wizard-subtitle {
-    -fx-text-fill: #7f8c8d;
-    -fx-font-size: 14px;
+  -fx-text-fill: #7f8c8d;
+  -fx-font-size: 14px;
 }
 
 .wizard-label {
-    -fx-text-fill: #A0A0A0;
-    -fx-font-size: 12px;
+  -fx-text-fill: #A0A0A0;
+  -fx-font-size: 12px;
 }
 
 /* Tile Button for Categories/Services */
 .tile-button {
-    -fx-background-radius: 12;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
-    -fx-content-display: TOP;
-    -fx-alignment: CENTER;
+  -fx-background-radius: 12;
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+  -fx-content-display: TOP;
+  -fx-alignment: CENTER;
 }
 
 .tile-button:hover {
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
-    -fx-effect: dropshadow(three-pass-box, rgba(108, 99, 255, 0.4), 8, 0, 0, 2);
+  -fx-scale-x: 1.05;
+  -fx-scale-y: 1.05;
+  -fx-effect: dropshadow(three-pass-box, rgba(108, 99, 255, 0.4), 8, 0, 0, 2);
 }
 
 /* Inputs in Dark Mode */
 .text-field,
 .date-picker,
 .combo-box {
-    -fx-background-color: #2C2C2C;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-border-color: transparent;
+  -fx-background-color: #2C2C2C;
+  -fx-text-fill: white;
+  -fx-background-radius: 8;
+  -fx-border-color: transparent;
 }
 
 .text-field:focused,
 .date-picker:focused,
 .combo-box:focused {
-    -fx-background-color: #383838;
-    -fx-border-color: #6C63FF;
-    -fx-border-radius: 8;
+  -fx-background-color: #383838;
+  -fx-border-color: #6C63FF;
+  -fx-border-radius: 8;
 }
 
 .date-picker .arrow-button,
 .combo-box .arrow-button {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 .date-picker .arrow,
 .combo-box .arrow {
-    -fx-background-color: #A0A0A0;
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
+  -fx-background-color: #A0A0A0;
 }
 
 
@@ -717,19 +693,98 @@
   -fx-font-weight: bold;
 }
 
+.text-title-large {
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-font-size: 26px;
+  -fx-font-weight: bold;
+}
+
+.text-title-medium {
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-font-size: 28px;
+  -fx-font-weight: bold;
+}
+
 .text-subheader {
   -fx-text-fill: -fx-theme-text-muted;
   -fx-font-size: 14px;
 }
 
 .text-section-title {
-  -fx-text-fill: -fx-theme-text-primary;
-  -fx-font-size: 18px;
+  -fx-text-fill: -fx-theme-accent;
+  -fx-font-size: 12px;
   -fx-font-weight: bold;
+}
+
+.text-label-small {
+  -fx-text-fill: -fx-theme-text-muted;
+  -fx-font-size: 11px;
 }
 
 .text-muted {
   -fx-text-fill: -fx-theme-text-muted;
+}
+
+.separator-horizontal {
+  -fx-background-color: -fx-theme-border-color;
+}
+
+/* Form Elements */
+.input-field {
+  -fx-background-color: -fx-theme-input-bg;
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-background-radius: 8;
+  -fx-padding: 12;
+  -fx-border-color: transparent;
+}
+
+.input-field:focused {
+  -fx-border-color: -fx-theme-accent;
+}
+
+.button-action {
+  -fx-background-color: -fx-theme-accent;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 8;
+  -fx-padding: 12 24;
+  -fx-cursor: hand;
+}
+
+.button-secondary-action {
+  -fx-background-color: #252525;
+  -fx-text-fill: white;
+  -fx-background-radius: 8;
+  -fx-padding: 12 20;
+  -fx-cursor: hand;
+}
+
+.button-danger {
+  -fx-background-color: transparent;
+  -fx-border-color: #EF4444;
+  -fx-border-width: 2;
+  -fx-border-radius: 8;
+  -fx-text-fill: #EF4444;
+  -fx-padding: 12;
+  -fx-cursor: hand;
+}
+
+.button-danger:hover {
+  -fx-background-color: rgba(239, 68, 68, 0.1);
+}
+
+.button-warning {
+  -fx-background-color: #F59E0B;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-background-radius: 8;
+  -fx-padding: 12;
+  -fx-cursor: hand;
+}
+
+.settings-radio {
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-mark-color: -fx-theme-accent;
 }
 
 /* Specific Buttons */

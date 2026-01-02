@@ -1,16 +1,23 @@
-package com.emsi.subtracker.views;
+package com.emsi.subtracker.controllers;
 
 import com.emsi.subtracker.models.Abonnement;
+import com.emsi.subtracker.models.FamilyMember;
+import com.emsi.subtracker.models.User;
+import com.emsi.subtracker.services.FamilyService;
 import com.emsi.subtracker.services.SubscriptionService;
+import com.emsi.subtracker.utils.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -28,8 +35,16 @@ public class AddSubscriptionController implements Initializable {
     private ComboBox<String> cmbFrequence;
     @FXML
     private ComboBox<String> cmbCategorie;
+    @FXML
+    private javafx.scene.layout.VBox assignToContainer;
+    @FXML
+    private ComboBox<String> assignToComboBox;
+    @FXML
+    private Label assignToLabel;
 
     private final SubscriptionService service = new SubscriptionService();
+    private final FamilyService familyService = new FamilyService();
+    private List<FamilyMember> familyMembers = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -42,6 +57,41 @@ public class AddSubscriptionController implements Initializable {
 
         // Date par défaut = aujourd'hui
         dateDebut.setValue(LocalDate.now());
+
+        // Charger membres de famille SI compte familial
+        UserSession session = UserSession.getInstance();
+        User user = session.getUser();
+
+        System.out.println("AddSubscription Init - Session User: " + user);
+        if (user != null) {
+            System.out.println("  -> Is Family Account? " + user.isFamilyAccount());
+            System.out.println("  -> Account Type: " + user.getAccountType());
+        }
+
+        if (user != null && user.isFamilyAccount()) {
+            // Compte familial - charger membres
+            familyMembers = familyService.getFamilyMembers(user.getId());
+
+            assignToComboBox.getItems().clear();
+            assignToComboBox.getItems().add("Moi (Compte principal)");
+            for (FamilyMember member : familyMembers) {
+                assignToComboBox.getItems().add(member.getName());
+            }
+
+            assignToComboBox.getSelectionModel().selectFirst();
+
+            // Show container
+            if (assignToContainer != null) {
+                assignToContainer.setVisible(true);
+                assignToContainer.setManaged(true);
+            }
+        } else {
+            // Hide container
+            if (assignToContainer != null) {
+                assignToContainer.setVisible(false);
+                assignToContainer.setManaged(false);
+            }
+        }
 
         // Platform.runLater to ensure Scene is not null
         javafx.application.Platform.runLater(() -> {
@@ -71,12 +121,35 @@ public class AddSubscriptionController implements Initializable {
                     currentAbonnement.setDateDebut(date);
                     currentAbonnement.setFrequence(frequence);
                     currentAbonnement.setCategorie(categorie);
+
+                    // Update assigned member
+                    Integer assignedMemberId = getAssignedMemberId();
+                    currentAbonnement.setAssignedToMemberId(assignedMemberId);
+
+                    // Update Branding (in case name changed)
+                    com.emsi.subtracker.services.BrandingService brandingObj = com.emsi.subtracker.services.BrandingService
+                            .getInstance();
+                    currentAbonnement.setLogoUrl(brandingObj.getLogoUrl(nom));
+                    currentAbonnement.setColorHex(brandingObj.getDominantColor(nom));
+
                     service.update(currentAbonnement);
                 } else {
                     // Create new
+                    UserSession session = UserSession.getInstance();
+                    int userId = session.getUserId();
+                    Integer assignedMemberId = getAssignedMemberId();
+
                     // Génération d'un ID (timestamp simple pour l'exemple)
                     int id = (int) (System.currentTimeMillis() % 100000);
-                    Abonnement nouvelAbonnement = new Abonnement(id, nom, prix, date, frequence, categorie);
+                    Abonnement nouvelAbonnement = new Abonnement(
+                            id, nom, prix, date, frequence, categorie, userId, assignedMemberId);
+
+                    // Smart Branding
+                    com.emsi.subtracker.services.BrandingService brandingObj = com.emsi.subtracker.services.BrandingService
+                            .getInstance();
+                    nouvelAbonnement.setLogoUrl(brandingObj.getLogoUrl(nom));
+                    nouvelAbonnement.setColorHex(brandingObj.getDominantColor(nom));
+
                     service.add(nouvelAbonnement);
                 }
 
@@ -129,5 +202,31 @@ public class AddSubscriptionController implements Initializable {
     private void afficherErreur(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR, message);
         alert.show();
+    }
+
+    /**
+     * Détermine l'ID du membre à qui assigner l'abonnement.
+     * 
+     * @return ID du membre, ou null si assigné au compte principal
+     */
+    private Integer getAssignedMemberId() {
+        UserSession session = UserSession.getInstance();
+
+        if (session.isFamilyMember()) {
+            // Membre connecté - assigner à lui
+            return session.getFamilyMember().getId();
+        } else if (session.getUser() != null && session.getUser().isFamilyAccount()) {
+            // Compte familial - vérifier dropdown
+            if (assignToComboBox.isVisible()) {
+                int selectedIndex = assignToComboBox.getSelectionModel().getSelectedIndex();
+                if (selectedIndex > 0) {
+                    // Index 0 = "Moi", 1+ = membres
+                    return familyMembers.get(selectedIndex - 1).getId();
+                }
+            }
+        }
+
+        // Par défaut: assigné au compte principal (null)
+        return null;
     }
 }

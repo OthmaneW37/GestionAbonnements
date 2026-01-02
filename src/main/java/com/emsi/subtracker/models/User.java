@@ -4,8 +4,13 @@ public class User {
     private int id;
     private String username;
     private String password;
-<<<<<<< HEAD
     private String email;
+
+    // Nouveaux champs pour gestion famille
+    private String accountType = "individual"; // "individual" ou "family"
+    private boolean isFamilyMember = false;
+    private Integer parentUserId = null; // Si membre, ID du parent
+    private String profilePicture = null; // Path or URL to profile picture
 
     public User() {
     }
@@ -21,18 +26,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-=======
-
-    public User(int id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
     }
 
     public int getId() {
@@ -58,7 +51,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-<<<<<<< HEAD
 
     public String getEmail() {
         return email;
@@ -68,14 +60,49 @@ public class User {
         this.email = email;
     }
 
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public boolean isFamilyMember() {
+        return isFamilyMember;
+    }
+
+    public void setFamilyMember(boolean familyMember) {
+        isFamilyMember = familyMember;
+    }
+
+    public Integer getParentUserId() {
+        return parentUserId;
+    }
+
+    public void setParentUserId(Integer parentUserId) {
+        this.parentUserId = parentUserId;
+    }
+
+    public boolean isFamilyAccount() {
+        return "family".equals(accountType);
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
+                ", accountType='" + accountType + '\'' +
                 '}';
     }
-=======
->>>>>>> 981914bfcf7f22d4c8c16c2ebb471e388aa49dbd
 }

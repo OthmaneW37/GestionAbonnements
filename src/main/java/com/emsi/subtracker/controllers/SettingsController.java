@@ -1,4 +1,4 @@
-package com.emsi.subtracker.views;
+package com.emsi.subtracker.controllers;
 
 import com.emsi.subtracker.models.Abonnement;
 import com.emsi.subtracker.models.User;
@@ -52,6 +52,9 @@ public class SettingsController implements Initializable {
     private PasswordField newPasswordField;
 
     @FXML
+    private ToggleButton themeToggle;
+
+    @FXML
     private ToggleGroup currencyGroup;
     @FXML
     private RadioButton currencyDH;
@@ -65,15 +68,31 @@ public class SettingsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         loadUserData();
         loadCurrencyPreference();
+        initThemeToggle();
 
         // Apply Theme
         javafx.application.Platform.runLater(() -> {
             if (usernameField.getScene() != null) {
+                // Initial application of theme
                 com.emsi.subtracker.utils.ThemeManager.applyTheme(usernameField.getScene());
             }
         });
+    }
+
+    private void initThemeToggle() {
+        if (themeToggle != null) {
+            themeToggle.setSelected(com.emsi.subtracker.utils.ThemeManager.isDarkTheme());
+            themeToggle.setText(com.emsi.subtracker.utils.ThemeManager.isDarkTheme() ? "Mode Sombre" : "Mode Clair");
+
+            themeToggle.selectedProperty().addListener((obs, oldVal, newVal) -> {
+                boolean isDark = newVal;
+                com.emsi.subtracker.utils.ThemeManager.setDarkTheme(isDark);
+                themeToggle.setText(isDark ? "Mode Sombre" : "Mode Clair");
+            });
+        }
     }
 
     private void loadUserData() {
@@ -236,8 +255,9 @@ public class SettingsController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
-                subscriptionService.importFromCsv();
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Importation terminée !");
+                // CSV import feature removed - application uses SQL Server exclusively
+                showAlert(Alert.AlertType.INFORMATION, "Fonctionnalité désactivée",
+                        "L'application utilise maintenant uniquement SQL Server.\nVeuillez importer vos données directement en base de données.");
             } catch (Exception e) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de l'importation : " + e.getMessage());
                 e.printStackTrace();

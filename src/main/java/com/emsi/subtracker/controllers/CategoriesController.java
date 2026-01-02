@@ -1,4 +1,4 @@
-package com.emsi.subtracker.views;
+package com.emsi.subtracker.controllers;
 
 import com.emsi.subtracker.utils.CategoryManager;
 import com.emsi.subtracker.utils.SceneManager;

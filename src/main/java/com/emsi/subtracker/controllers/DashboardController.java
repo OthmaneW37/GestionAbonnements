@@ -1,320 +1,597 @@
 package com.emsi.subtracker.controllers;
 
-import com.emsi.subtracker.dao.SubscriptionDAO;
-import com.emsi.subtracker.models.Subscription;
-import com.emsi.subtracker.models.SubscriptionTemplate;
+import com.emsi.subtracker.models.Abonnement;
 import com.emsi.subtracker.models.User;
-import com.emsi.subtracker.services.CsvService;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
+import com.emsi.subtracker.services.EmailService;
+import com.emsi.subtracker.services.SubscriptionService;
+import com.emsi.subtracker.utils.SceneManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
+import java.text.DecimalFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
+/**
+ * Contrôleur de l'écran principal (Dashboard) - Version Cartes Visuelles.
+ */
 public class DashboardController implements Initializable {
 
     @FXML
-    private TableView<Subscription> subscriptionTable;
+    private Label lblWelcome;
+
     @FXML
-    private TableColumn<Subscription, String> colName;
+    private Label lblTotalMensuel;
+
     @FXML
-    private TableColumn<Subscription, Double> colPrice;
-    @FXML
-    private TableColumn<Subscription, LocalDate> colDate;
-    @FXML
-    private TableColumn<Subscription, String> colCategory;
-    @FXML
-    private TableColumn<Subscription, String> colFrequency;
+    private FlowPane cardsContainer;
 
     @FXML
     private TextField searchField;
+
     @FXML
     private ComboBox<String> categoryFilter;
 
-    private User currentUser;
-    private final SubscriptionDAO subscriptionDAO = new SubscriptionDAO();
-    private final CsvService csvService = new CsvService();
-    private ObservableList<Subscription> masterData = FXCollections.observableArrayList();
-    private List<SubscriptionTemplate> allTemplates;
+    @FXML
+    private ComboBox<String> sortFilter;
+
+    @FXML
+    private ToggleButton themeToggleDashboard;
+
+    private final SubscriptionService service = new SubscriptionService();
+    private final EmailService emailService = EmailService.getInstance();
+    private final DecimalFormat df = new DecimalFormat("0.00");
+
+    private List<Abonnement> allSubscriptions;
+
+    private final com.emsi.subtracker.services.FamilyService familyService = new com.emsi.subtracker.services.FamilyService();
+    private java.util.Map<Integer, String> familyMemberNames = new java.util.HashMap<>();
+
+    @FXML
+    private Label lblNombreAbonnements;
+
+    @FXML
+    private javafx.scene.image.ImageView userAvatar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupTableColumns();
-
-        // Load templates
-        allTemplates = csvService.loadTemplates();
-        List<String> categories = csvService.getUniqueCategories(allTemplates);
-        categories.add(0, "All Categories");
-        categoryFilter.setItems(FXCollections.observableArrayList(categories));
-        categoryFilter.getSelectionModel().selectFirst();
-    }
-
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-        loadData();
-    }
-
-    private void loadData() {
-        if (currentUser == null)
-            return;
-        masterData.setAll(subscriptionDAO.getAllSubscriptions(currentUser.getId()));
-
-        FilteredList<Subscription> filteredData = new FilteredList<>(masterData, p -> true);
-
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(sub -> filter(sub, newValue, categoryFilter.getValue()));
-        });
-
-        categoryFilter.valueProperty().addListener((obs, oldVal, newVal) -> {
-            filteredData.setPredicate(sub -> filter(sub, searchField.getText(), newVal));
-        });
-
-        subscriptionTable.setItems(filteredData);
-    }
-
-    private boolean filter(Subscription sub, String searchText, String category) {
-        boolean matchesSearch = true;
-        if (searchText != null && !searchText.isEmpty()) {
-            String lowerCaseFilter = searchText.toLowerCase();
-            if (sub.getName().toLowerCase().contains(lowerCaseFilter))
-                matchesSearch = true;
-            else
-                matchesSearch = sub.getCategory().toLowerCase().contains(lowerCaseFilter);
-        }
-
-        boolean matchesCategory = true;
-        if (category != null && !category.equals("All Categories")) {
-            matchesCategory = sub.getCategory().equals(category);
-        }
-
-        return matchesSearch && matchesCategory;
-    }
-
-    private void setupTableColumns() {
-        colName.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getName()));
-        colPrice.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getPrice()));
-        colDate.setCellValueFactory(cell -> new SimpleObjectProperty<>(cell.getValue().getDateStart()));
-        colCategory.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getCategory()));
-        colFrequency.setCellValueFactory(cell -> new SimpleStringProperty(cell.getValue().getFrequency()));
-    }
-
-    @FXML
-    private void handleLogout() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/views/login.fxml"));
-            Stage stage = (Stage) subscriptionTable.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+            System.out.println("DashboardController initialization started...");
 
-    @FXML
-    private void handleGoToStats() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/stats.fxml"));
-            Parent root = loader.load();
-            StatsController controller = loader.getController();
-            controller.initData(masterData, currentUser);
-            Stage stage = (Stage) subscriptionTable.getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleAdd() {
-        showPremiumAddDialog(null);
-    }
-
-    @FXML
-    private void handleEdit() {
-        Subscription selected = subscriptionTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("No selection", "Please select a subscription first.");
-            return;
-        }
-        showPremiumAddDialog(selected);
-    }
-
-    @FXML
-    private void handleDelete() {
-        Subscription selected = subscriptionTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("No selection", "Please select a subscription to delete.");
-            return;
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Subscription");
-        alert.setHeaderText("Delete " + selected.getName() + "?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            subscriptionDAO.deleteSubscription(selected.getId());
-            loadData();
-        }
-    }
-
-    private void showPremiumAddDialog(Subscription sub) {
-        Dialog<Subscription> dialog = new Dialog<>();
-        dialog.setTitle(sub == null ? "New Subscription" : "Edit Subscription");
-        dialog.setHeaderText(null);
-        dialog.setResizable(true); // Allow resizing
-        dialog.getDialogPane().setMinHeight(600); // Force larger height
-        dialog.getDialogPane().setMinWidth(500); // Force larger width
-
-        // Inject Stylesheet
-        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
-        dialog.getDialogPane().getStyleClass().add("custom-dialog");
-
-        // UI Components
-        ComboBox<String> categorySelector = new ComboBox<>();
-        List<String> rawCats = csvService.getUniqueCategories(allTemplates);
-        categorySelector.setItems(FXCollections.observableArrayList(rawCats));
-        categorySelector.setPromptText("Select a Category first...");
-        categorySelector.setMaxWidth(Double.MAX_VALUE);
-        categorySelector.getStyleClass().add("combo-box");
-
-        FlowPane templatesPane = new FlowPane();
-        templatesPane.setHgap(10);
-        templatesPane.setVgap(10);
-        templatesPane.setPrefWrapLength(300);
-
-        TextField nameField = new TextField();
-        nameField.setPromptText("Subscription Name");
-        nameField.getStyleClass().add("text-field");
-
-        TextField priceField = new TextField();
-        priceField.setPromptText("Price (€)");
-        priceField.getStyleClass().add("text-field");
-
-        DatePicker datePicker = new DatePicker(LocalDate.now());
-        datePicker.getStyleClass().add("text-field"); // Reuse text-field style for consistency
-
-        ComboBox<String> freqBox = new ComboBox<>(FXCollections.observableArrayList("Monthly", "Yearly"));
-        freqBox.setValue("Monthly");
-        freqBox.getStyleClass().add("combo-box");
-
-        // Logic for Template Selection
-        categorySelector.setOnAction(e -> {
-            templatesPane.getChildren().clear();
-            String selectedCat = categorySelector.getValue();
-            if (selectedCat != null) {
-                List<SubscriptionTemplate> relevant = allTemplates.stream()
-                        .filter(t -> t.getCategory().equals(selectedCat))
-                        .collect(Collectors.toList());
-
-                for (SubscriptionTemplate t : relevant) {
-                    Button card = new Button(t.getName());
-                    // Dynamic style for buttons
-                    card.setStyle("-fx-background-color: " + t.getHexColor()
-                            + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;");
-                    card.setPrefWidth(120);
-                    card.setMinHeight(40);
-                    card.setOnAction(evt -> {
-                        nameField.setText(t.getName());
-                        priceField.setText(String.valueOf(t.getDefaultPrice()));
-                    });
-                    templatesPane.getChildren().add(card);
-                }
+            // ✅ Init Theme Toggle
+            if (themeToggleDashboard != null) {
+                boolean isDark = com.emsi.subtracker.utils.ThemeManager.isDarkTheme();
+                themeToggleDashboard.setSelected(isDark);
+                themeToggleDashboard.setText(isDark ? "☀️" : "🌙");
             }
-        });
 
-        // Pre-fill if editing
-        if (sub != null) {
-            nameField.setText(sub.getName());
-            priceField.setText(String.valueOf(sub.getPrice()));
-            datePicker.setValue(sub.getDateStart());
-            categorySelector.setValue(sub.getCategory());
-            freqBox.setValue(sub.getFrequency());
+            // 1. Init Category Filter
+            if (categoryFilter != null) {
+                categoryFilter.getItems().addAll("Toutes", "Divertissement", "Travail", "Sport", "Musique", "Autre");
+                categoryFilter.getSelectionModel().selectFirst();
+                categoryFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterSubscriptions());
+            }
+
+            // 2. Init Sort Filter
+            if (sortFilter != null) {
+                sortFilter.getItems().addAll("Par défaut", "Prix croissant", "Prix décroissant", "Date de début");
+                sortFilter.getSelectionModel().selectFirst();
+                sortFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterSubscriptions());
+            }
+
+            // 3. Init Search Listener
+            if (searchField != null) {
+                searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filterSubscriptions();
+                });
+            } else {
+                System.err.println("WARNING: searchField is null in DashboardController");
+            }
+
+            // 4. Preload Family Members for Name Resolution
+            preloadFamilyMembers();
+
+            refreshDashboard();
+
+            // ✅ INTÉGRATION EMAIL: Vérifier et envoyer les alertes de renouvellement J-3
+            checkRenewalAlerts();
+
+            System.out.println("DashboardController initialization completed.");
+        } catch (Exception e) {
+            System.err.println("CRITICAL ERROR initializing DashboardController: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void updateActiveWindows() {
+        if (lblTotalMensuel != null && lblTotalMensuel.getScene() != null) {
+            com.emsi.subtracker.utils.ThemeManager.applyTheme(lblTotalMensuel.getScene());
+        }
+    }
+
+    private void refreshDashboard() {
+        com.emsi.subtracker.models.User currentUser = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
+        if (currentUser != null && lblWelcome != null) {
+            lblWelcome.setText("Bonjour, " + currentUser.getUsername());
         }
 
-        // Layout
-        VBox form = new VBox(15);
-        form.setPadding(new Insets(20));
-        form.setStyle("-fx-background-color: #24243e;"); // Ensure background match
+        // Fetch Data once
+        this.allSubscriptions = service.getAll();
 
-        Label step1 = new Label("1. Choose Category:");
-        step1.getStyleClass().add("dialog-label");
-        Label step2 = new Label("2. Pick Service (Optional):");
-        step2.getStyleClass().add("dialog-label");
-        Label step3 = new Label("3. Details:");
-        step3.getStyleClass().add("dialog-label");
+        // 1. Mise à jour du total
+        double total = service.calculerTotalMensuel();
 
-        form.getChildren().addAll(
-                step1, categorySelector,
-                step2, templatesPane,
-                new Separator(),
-                step3, nameField, priceField, datePicker, freqBox);
+        // Currency Conversion
+        String currency = com.emsi.subtracker.utils.UserSession.getInstance().getCurrency();
+        double displayTotal = convertPrice(total, currency);
+        String symbol = getCurrencySymbol(currency);
 
-        dialog.getDialogPane().setContent(form);
+        lblTotalMensuel.setText(df.format(displayTotal) + " " + symbol);
 
-        ButtonType saveType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(saveType, ButtonType.CANCEL);
+        // 2. Refresh List
+        filterSubscriptions();
 
-        // Find buttons and style them
-        Button saveBtn = (Button) dialog.getDialogPane().lookupButton(saveType);
-        saveBtn.getStyleClass().add("action-button-primary");
-        Button cancelBtn = (Button) dialog.getDialogPane().lookupButton(ButtonType.CANCEL);
-        cancelBtn.getStyleClass().add("action-button-secondary");
+        // 3. Sync Active Stats
+        if (lblNombreAbonnements != null) {
+            lblNombreAbonnements.setText(String.valueOf(allSubscriptions.size()));
+        }
 
-        dialog.setResultConverter(b -> {
-            if (b == saveType) {
+        // 4. Update User Avatar
+        loadUserAvatar();
+    }
+
+    private void loadUserAvatar() {
+        com.emsi.subtracker.utils.UIUtils.loadUserAvatar(userAvatar, 22.5);
+    }
+
+    private double convertPrice(double priceInDH, String targetCurrency) {
+        switch (targetCurrency) {
+            case "EUR":
+                return priceInDH * 0.091; // Approx rate
+            case "USD":
+                return priceInDH * 0.099; // Approx rate
+            default:
+                return priceInDH;
+        }
+    }
+
+    private String getCurrencySymbol(String currency) {
+        switch (currency) {
+            case "EUR":
+                return "€";
+            case "USD":
+                return "$";
+            default:
+                return "DH";
+        }
+    }
+
+    private void filterSubscriptions() {
+        if (allSubscriptions == null)
+            return;
+
+        cardsContainer.getChildren().clear();
+
+        String query = (searchField != null && searchField.getText() != null) ? searchField.getText().toLowerCase()
+                : "";
+        String category = (categoryFilter != null) ? categoryFilter.getValue() : "Toutes";
+        String sortMode = (sortFilter != null) ? sortFilter.getValue() : "Par défaut";
+
+        List<Abonnement> filtered = allSubscriptions.stream()
+                .filter(sub -> {
+                    // Filter by Search
+                    boolean matchesSearch = query.isEmpty()
+                            || (sub.getNom() != null && sub.getNom().toLowerCase().contains(query));
+
+                    // Filter by Category
+                    boolean matchesCategory = "Toutes".equals(category)
+                            || (sub.getCategorie() != null && sub.getCategorie().equalsIgnoreCase(category));
+
+                    return matchesSearch && matchesCategory;
+                })
+                .collect(java.util.stream.Collectors.toList());
+
+        // Sort
+        if ("Prix croissant".equals(sortMode)) {
+            filtered.sort(java.util.Comparator.comparingDouble(Abonnement::getPrix));
+        } else if ("Prix décroissant".equals(sortMode)) {
+            filtered.sort(java.util.Comparator.comparingDouble(Abonnement::getPrix).reversed());
+        } else if ("Date de début".equals(sortMode)) {
+            filtered.sort(java.util.Comparator.comparing(Abonnement::getDateDebut));
+        }
+
+        // Display
+        for (Abonnement sub : filtered) {
+            VBox card = createSubscriptionCard(sub);
+            cardsContainer.getChildren().add(card);
+        }
+    }
+
+    private VBox createSubscriptionCard(Abonnement sub) {
+        VBox card = new VBox(14);
+        card.setPrefWidth(320); // Reduced from 340
+        card.setMinHeight(200);
+
+        // 🎨 SMART BRANDING COLOR
+        String colorHex = sub.getColorHex();
+        if (colorHex == null || colorHex.isEmpty()) {
+            colorHex = getCategoryGradient(sub.getCategorie()); // Fallback to category gradient
+            card.setStyle(
+                    "-fx-background-color: linear-gradient(to bottom right, " + colorHex + "); " +
+                            "-fx-background-radius: 18; " +
+                            "-fx-padding: 24; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 16, 0, 0, 4); " +
+                            "-fx-cursor: hand;");
+        } else {
+            card.setStyle(
+                    "-fx-background-color: " + colorHex + "; " +
+                            "-fx-background-radius: 18; " +
+                            "-fx-padding: 24; " +
+                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 16, 0, 0, 4); " +
+                            "-fx-cursor: hand;");
+        }
+
+        // HEADER: Nom + Logo
+        javafx.scene.layout.HBox header = new javafx.scene.layout.HBox(12);
+        header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        // Logo Container (White Circle Background for better visibility)
+        javafx.scene.layout.StackPane logoContainer = new javafx.scene.layout.StackPane();
+        logoContainer.setMinSize(40, 40);
+        logoContainer.setPrefSize(40, 40);
+        logoContainer.setMaxSize(40, 40);
+
+        javafx.scene.shape.Circle bgCircle = new javafx.scene.shape.Circle(20, javafx.scene.paint.Color.WHITE);
+        bgCircle.setEffect(new javafx.scene.effect.DropShadow(4, javafx.scene.paint.Color.rgb(0, 0, 0, 0.15)));
+
+        javafx.scene.image.ImageView logoView = new javafx.scene.image.ImageView();
+        logoView.setFitWidth(24);
+        logoView.setFitHeight(24);
+        logoView.setPreserveRatio(true);
+        logoView.setSmooth(true);
+
+        logoContainer.getChildren().addAll(bgCircle, logoView);
+
+        boolean hasLogo = sub.getLogoUrl() != null && !sub.getLogoUrl().isEmpty();
+
+        // Load Image Async
+        if (hasLogo) {
+            new Thread(() -> {
                 try {
-                    return new Subscription(
-                            nameField.getText(),
-                            Double.parseDouble(priceField.getText()),
-                            datePicker.getValue(),
-                            categorySelector.getValue(),
-                            freqBox.getValue(),
-                            currentUser.getId());
-                } catch (Exception e) {
-                    return null;
+                    String url = sub.getLogoUrl();
+                    javafx.scene.image.Image img = new javafx.scene.image.Image(url, true); // background loading
+
+                    // Update UI when loaded
+                    img.progressProperty().addListener((obs, oldVal, progress) -> {
+                        if (progress.doubleValue() == 1.0 && !img.isError()) {
+                            javafx.application.Platform.runLater(() -> logoView.setImage(img));
+                        }
+                    });
+                } catch (Exception ignored) {
                 }
+            }).start();
+        }
+
+        Label lblName = new Label(sub.getNom());
+        lblName.setStyle("-fx-text-fill: white; -fx-font-size: 22; -fx-font-weight: bold;");
+        lblName.setMaxWidth(Double.MAX_VALUE);
+        javafx.scene.layout.HBox.setHgrow(lblName, javafx.scene.layout.Priority.ALWAYS);
+
+        if (hasLogo) {
+            header.getChildren().addAll(logoContainer, lblName);
+        } else {
+            header.getChildren().addAll(lblName);
+        }
+
+        // --- NEW: Display Assigned Member if applicable ---
+        Integer memberId = sub.getAssignedToMemberId();
+
+        // Hide if self-assigned (User is the Family Member)
+        com.emsi.subtracker.utils.UserSession session = com.emsi.subtracker.utils.UserSession.getInstance();
+        boolean isSelf = false;
+        if (session.isFamilyMember() && memberId != null) {
+            if (session.getFamilyMember().getId() == memberId) {
+                isSelf = true;
             }
-            return null;
+        }
+
+        if (memberId != null && memberId > 0 && !isSelf) {
+            String memberName = familyMemberNames.getOrDefault(memberId, "Membre #" + memberId);
+            Label lblAssigned = new Label("👤 " + memberName);
+            lblAssigned.setStyle("-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 12; -fx-padding: 4 0 0 0;");
+
+            // Add below name or in a VBox with name
+            VBox nameBox = new VBox(2);
+            nameBox.getChildren().addAll(lblName, lblAssigned);
+            javafx.scene.layout.HBox.setHgrow(nameBox, javafx.scene.layout.Priority.ALWAYS);
+
+            // Clear previous children and rebuild
+            header.getChildren().clear();
+            if (hasLogo) {
+                header.getChildren().addAll(logoContainer, nameBox);
+            } else {
+                header.getChildren().addAll(nameBox);
+            }
+        }
+        // --------------------------------------------------
+
+        // PRIX ÉNORME
+        javafx.scene.layout.HBox priceRow = new javafx.scene.layout.HBox(10);
+        priceRow.setAlignment(javafx.geometry.Pos.BASELINE_LEFT);
+
+        String currency = com.emsi.subtracker.utils.UserSession.getInstance().getCurrency();
+        double displayPrice = convertPrice(sub.getPrix(), currency);
+        String symbol = getCurrencySymbol(currency);
+
+        Label lblPrice = new Label(df.format(displayPrice));
+        lblPrice.setStyle("-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;");
+
+        Label currencyLabel = new Label(symbol);
+        currencyLabel.setStyle(
+                "-fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 8 0 0 0;");
+
+        Label freqLabel = new Label("/ " + getFrequencyShort(sub.getFrequence()));
+        freqLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.75); -fx-font-size: 16; -fx-padding: 10 0 0 0;");
+
+        priceRow.getChildren().addAll(lblPrice, currencyLabel, freqLabel);
+
+        // 📅 RENOUVELLEMENT
+        String nextRenewal = calculateNextRenewal(sub);
+        Label dateLabel = new Label("📅  Renouvellement: " + nextRenewal);
+        dateLabel.setStyle(
+                "-fx-text-fill: rgba(255,255,255,0.92); -fx-font-size: 14; -fx-font-weight: 500; -fx-padding: 4 0 0 0;");
+
+        // SPACER
+        javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
+        javafx.scene.layout.VBox.setVgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+        // ACTIONS FOOTER
+        javafx.scene.layout.HBox actionsRow = new javafx.scene.layout.HBox(12);
+        actionsRow.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+
+        Button editBtn = new Button("✏️ Modifier");
+        editBtn.setStyle(
+                "-fx-background-color: rgba(255,255,255,0.22); " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 14; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-padding: 11 20; " +
+                        "-fx-cursor: hand;");
+        editBtn.setOnAction(e -> editSubscription(sub));
+
+        // Hover effect pour edit
+        final String editStyle = editBtn.getStyle();
+        editBtn.setOnMouseEntered(e -> editBtn.setStyle(editStyle + "-fx-background-color: rgba(255,255,255,0.35);"));
+        editBtn.setOnMouseExited(e -> editBtn.setStyle(editStyle));
+
+        Button deleteBtn = new Button("🗑");
+        deleteBtn.setStyle(
+                "-fx-background-color: rgba(255,70,70,0.4); " +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 16; " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-padding: 11 16; " +
+                        "-fx-cursor: hand;");
+        deleteBtn.setOnAction(e -> deleteSubscription(sub));
+
+        // Hover effect pour delete
+        final String deleteStyle = deleteBtn.getStyle();
+        deleteBtn.setOnMouseEntered(
+                e -> deleteBtn.setStyle(deleteStyle + "-fx-background-color: rgba(255,70,70,0.65);"));
+        deleteBtn.setOnMouseExited(e -> deleteBtn.setStyle(deleteStyle));
+
+        actionsRow.getChildren().addAll(editBtn, deleteBtn);
+
+        // ASSEMBLAGE
+        card.getChildren().addAll(header, priceRow, dateLabel, spacer, actionsRow);
+
+        // Hover effect sur la carte entière
+        final String cardStyle = card.getStyle();
+        card.setOnMouseEntered(e -> {
+            card.setStyle(cardStyle
+                    + "-fx-scale-x: 1.02; -fx-scale-y: 1.02; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 20, 0, 0, 6);");
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle(cardStyle);
         });
 
-        // Save logic
-        dialog.showAndWait().ifPresent(result -> {
-            if (sub != null)
-                result.setId(sub.getId());
-
-            if (sub == null)
-                subscriptionDAO.addSubscription(result);
-            else
-                subscriptionDAO.updateSubscription(result);
-
-            loadData();
-        });
+        return card;
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    // 🎨 Obtenir gradient selon catégorie
+    private String getCategoryGradient(String category) {
+        if (category == null)
+            return "#667EEA, #764BA2";
+        return switch (category.toLowerCase()) {
+            case "divertissement" -> "#FF6B6B, #FF8E53";
+            case "travail" -> "#4E54C8, #8F94FB";
+            case "sport" -> "#11998E, #38EF7D";
+            case "musique" -> "#C471ED, #F64F59";
+            case "santé" -> "#FA709A, #FEE140";
+            default -> "#667EEA, #764BA2";
+        };
+    }
+
+    // Raccourcir fréquence
+    private String getFrequencyShort(String freq) {
+        if (freq == null)
+            return "mois";
+        return switch (freq.toLowerCase()) {
+            case "mensuel" -> "mois";
+            case "annuel" -> "an";
+            case "hebdomadaire" -> "sem";
+            default -> freq;
+        };
+    }
+
+    // Calculer prochaine date renouvellement
+    private String calculateNextRenewal(Abonnement sub) {
+        if (sub.getDateDebut() == null)
+            return "Non défini";
+
+        java.time.LocalDate next = sub.getDateDebut();
+        java.time.LocalDate today = java.time.LocalDate.now();
+
+        while (next.isBefore(today) || next.equals(today)) {
+            String freq = sub.getFrequence() != null ? sub.getFrequence().toLowerCase() : "mensuel";
+            next = switch (freq) {
+                case "mensuel" -> next.plusMonths(1);
+                case "annuel" -> next.plusYears(1);
+                case "hebdomadaire" -> next.plusWeeks(1);
+                default -> next.plusMonths(1);
+            };
+        }
+
+        long daysUntil = java.time.temporal.ChronoUnit.DAYS.between(today, next);
+        if (daysUntil == 0)
+            return "Aujourd'hui ⚠️";
+        if (daysUntil == 1)
+            return "Demain ⚠️";
+        if (daysUntil <= 7)
+            return "Dans " + daysUntil + " jours";
+        if (daysUntil <= 30)
+            return "Dans " + (daysUntil / 7) + " semaines";
+
+        return next.format(java.time.format.DateTimeFormatter.ofPattern("dd MMM yyyy"));
+    }
+
+    private void editSubscription(Abonnement sub) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/add_subscription.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().add(getClass().getResource("/styles_v2.css").toExternalForm());
+            com.emsi.subtracker.utils.ThemeManager.applyTheme(scene);
+
+            AddSubscriptionController controller = fxmlLoader.getController();
+            controller.setAbonnement(sub);
+
+            Stage stage = new Stage();
+            stage.setTitle("Modifier l'abonnement");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            refreshDashboard();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteSubscription(Abonnement sub) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Supprimer " + sub.getNom() + " ?");
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer cet abonnement ?");
+
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            service.remove(sub.getId());
+            refreshDashboard();
+        }
+    }
+
+    @FXML
+    protected void onBtnAjouterClick() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/add_subscription.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+
+            // Apply CSS to Modal
+            scene.getStylesheets().add(getClass().getResource("/styles_v2.css").toExternalForm());
+            com.emsi.subtracker.utils.ThemeManager.applyTheme(scene);
+
+            Stage stage = new Stage();
+            stage.setTitle("Nouvel Abonnement");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            // Refresh après fermeture
+            refreshDashboard();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void onProfileClick() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/user_profile.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().add(getClass().getResource("/styles_v2.css").toExternalForm());
+            com.emsi.subtracker.utils.ThemeManager.applyTheme(scene);
+
+            Stage stage = new Stage();
+            stage.setTitle("Mon Profil");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            // Refresh Avatar after close
+            loadUserAvatar();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void onSettingsClick() {
+        try {
+            Stage currentStage = (Stage) lblTotalMensuel.getScene().getWindow();
+            SceneManager.switchScene(currentStage, "settings.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void goToAnalytics() {
+        try {
+            Stage currentStage = (Stage) lblTotalMensuel.getScene().getWindow();
+            SceneManager.switchScene(currentStage, "analytics.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Vérifie les abonnements et envoie des alertes pour ceux qui arrivent à
+     * échéance dans 3 jours.
+     */
+    private void checkRenewalAlerts() {
+        User currentUser = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
+        if (currentUser != null && allSubscriptions != null) {
+            emailService.checkAndSendAlerts(currentUser, allSubscriptions);
+            System.out.println("🔔 Vérification des alertes de renouvellement effectuée.");
+        }
+    }
+
+    @FXML
+    private void onThemeToggle() {
+        boolean isDark = themeToggleDashboard.isSelected();
+        com.emsi.subtracker.utils.ThemeManager.setDarkTheme(isDark);
+        themeToggleDashboard.setText(isDark ? "☀️" : "🌙");
+    }
+
+    private void preloadFamilyMembers() {
+        com.emsi.subtracker.models.User user = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
+        if (user != null && user.isFamilyAccount()) {
+            List<com.emsi.subtracker.models.FamilyMember> members = familyService.getFamilyMembers(user.getId());
+            for (com.emsi.subtracker.models.FamilyMember m : members) {
+                familyMemberNames.put(m.getId(), m.getName());
+            }
+        }
     }
 }

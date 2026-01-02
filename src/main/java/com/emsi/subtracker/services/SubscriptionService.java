@@ -23,12 +23,21 @@ public class SubscriptionService {
      * Récupère tous les abonnements de l'utilisateur connecté.
      */
     public List<Abonnement> getAll() {
-        com.emsi.subtracker.models.User user = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
-        if (user == null) {
-            System.err.println("Aucun utilisateur connecté !");
-            return List.of();
+        com.emsi.subtracker.utils.UserSession session = com.emsi.subtracker.utils.UserSession.getInstance();
+
+        // 1. If Family Member is logged in
+        if (session.isFamilyMember()) {
+            return subscriptionDAO.findAllByAssignedMemberId(session.getFamilyMember().getId());
         }
-        return subscriptionDAO.findAll(user.getId());
+
+        // 2. If Parent User is logged in
+        com.emsi.subtracker.models.User user = session.getUser();
+        if (user != null) {
+            return subscriptionDAO.findAll(user.getId());
+        }
+
+        System.err.println("Aucun utilisateur connecté !");
+        return List.of();
     }
 
     /**
@@ -89,27 +98,17 @@ public class SubscriptionService {
     }
 
     /**
-     * Importe les abonnements depuis le fichier CSV data_abonnements.csv
-     * et les sauvegarde en base de données pour l'utilisateur courant.
+     * Calcule le coût mensuel total pour une liste donnée d'abonnements.
+     * Utile pour afficher des sous-totaux par membre de famille.
      */
-    public void importFromCsv() {
-        CsvService csvService = new CsvService();
-        List<Abonnement> csvSubscriptions = csvService.chargerTout();
-
-        com.emsi.subtracker.models.User user = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
-        if (user == null) {
-            System.err.println("Impossible d'importer : aucun utilisateur connecté.");
-            return;
-        }
-
-        int count = 0;
-        for (Abonnement sub : csvSubscriptions) {
-            sub.setUserId(user.getId());
-            // On laisse la DAO générer un nouvel ID auto-incrémenté pour éviter les
-            // conflits
-            subscriptionDAO.save(sub);
-            count++;
-        }
-        System.out.println("Importation terminée : " + count + " abonnements ajoutés depuis le CSV.");
+    public double calculerTotalMensuel(List<Abonnement> abonnements) {
+        return abonnements.stream()
+                .mapToDouble(a -> {
+                    if ("Annuel".equalsIgnoreCase(a.getFrequence())) {
+                        return a.getPrix() / 12.0;
+                    }
+                    return a.getPrix();
+                })
+                .sum();
     }
 }

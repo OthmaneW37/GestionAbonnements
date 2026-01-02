@@ -2,17 +2,37 @@ package com.emsi.subtracker.dao.impl;
 
 import com.emsi.subtracker.dao.UserDAO;
 import com.emsi.subtracker.models.User;
-import com.emsi.subtracker.util.DatabaseConnection;
+import com.emsi.subtracker.utils.DBConnection;
 
 import java.sql.*;
 import java.util.Optional;
 
 public class UserDAOImpl implements UserDAO {
 
+    public UserDAOImpl() {
+        // Simple migration to ensure columns exist
+        try (Connection conn = DBConnection.getInstance().getConnection();
+                Statement stmt = conn.createStatement()) {
+
+            // Check account_type
+            String sql1 = "IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'users' AND COLUMN_NAME = 'account_type') "
+                    + "BEGIN ALTER TABLE users ADD account_type VARCHAR(20) DEFAULT 'individual'; END";
+            stmt.execute(sql1);
+
+            // Check profile_picture
+            String sql2 = "IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'users' AND COLUMN_NAME = 'profile_picture') "
+                    + "BEGIN ALTER TABLE users ADD profile_picture VARCHAR(255) NULL; END";
+            stmt.execute(sql2);
+
+        } catch (SQLException e) {
+            System.err.println("Migration warning: " + e.getMessage());
+        }
+    }
+
     @Override
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        try (Connection conn = DBConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
@@ -30,7 +50,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Optional<User> findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        try (Connection conn = DBConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, email);
@@ -47,13 +67,16 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User create(User user) {
-        String sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        String sql = "INSERT INTO users (username, password, email, account_type, profile_picture) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
+            // Default to individual if null
+            stmt.setString(4, user.getAccountType() != null ? user.getAccountType() : "individual");
+            stmt.setString(5, user.getProfilePicture());
 
             int affectedRows = stmt.executeUpdate();
 
@@ -79,14 +102,16 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void update(User user) {
-        String sql = "UPDATE users SET username = ?, password = ?, email = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        String sql = "UPDATE users SET username = ?, password = ?, email = ?, account_type = ?, profile_picture = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
-            stmt.setInt(4, user.getId());
+            stmt.setString(4, user.getAccountType());
+            stmt.setString(5, user.getProfilePicture());
+            stmt.setInt(6, user.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -101,7 +126,7 @@ public class UserDAOImpl implements UserDAO {
         // For now, we assume standard deletion or that the Service layer handles
         // cleanup.
         String sql = "DELETE FROM users WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+        try (Connection conn = DBConnection.getInstance().getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, userId);
@@ -112,10 +137,31 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        return new User(
+        User user = new User(
                 rs.getInt("id"),
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("email"));
+
+        // Handle account_type safely
+        try {
+            String type = rs.getString("account_type");
+            if (type != null) {
+                user.setAccountType(type);
+            }
+        } catch (SQLException e) {
+            // Column might not exist
+        }
+
+        // Handle profile_picture safely
+        try {
+            String pic = rs.getString("profile_picture");
+            if (pic != null) {
+                user.setProfilePicture(pic);
+            }
+        } catch (SQLException e) {
+            // Column might not exist
+        }
+        return user;
     }
 }
