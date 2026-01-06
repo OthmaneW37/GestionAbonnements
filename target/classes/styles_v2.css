@@ -285,9 +285,9 @@
   -fx-background-radius: 20;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
   -fx-cursor: hand;
-  -fx-padding: 20;
-  -fx-min-width: 190;
-  -fx-max-width: 190;
+  -fx-padding: 15;
+  -fx-min-width: 180;
+  -fx-max-width: 180;
   -fx-min-height: 160;
 }
 
