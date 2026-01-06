@@ -44,23 +44,7 @@ public class SubscriptionDAOImpl implements SubscriptionDAO {
         try (Connection conn = DBConnection.getInstance().getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, abonnement.getNom());
-            pstmt.setDouble(2, abonnement.getPrix());
-            pstmt.setDate(3, Date.valueOf(abonnement.getDateDebut()));
-            pstmt.setString(4, abonnement.getFrequence());
-            pstmt.setString(5, abonnement.getCategorie());
-            pstmt.setInt(6, abonnement.getUserId());
-
-            // assigned_to_member_id peut être null
-            // assigned_to_member_id peut être null
-            if (abonnement.getAssignedToMemberId() != null) {
-                pstmt.setInt(7, abonnement.getAssignedToMemberId());
-            } else {
-                pstmt.setNull(7, Types.INTEGER);
-            }
-
-            pstmt.setString(8, abonnement.getLogoUrl());
-            pstmt.setString(9, abonnement.getColorHex());
+            setStatementParams(pstmt, abonnement);
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -256,5 +240,23 @@ public class SubscriptionDAOImpl implements SubscriptionDAO {
         }
 
         return sub;
+    }
+
+    private void setStatementParams(PreparedStatement pstmt, Abonnement abonnement) throws SQLException {
+        pstmt.setString(1, abonnement.getNom());
+        pstmt.setDouble(2, abonnement.getPrix());
+        pstmt.setDate(3, Date.valueOf(abonnement.getDateDebut()));
+        pstmt.setString(4, abonnement.getFrequence());
+        pstmt.setString(5, abonnement.getCategorie());
+        pstmt.setInt(6, abonnement.getUserId());
+
+        if (abonnement.getAssignedToMemberId() != null) {
+            pstmt.setInt(7, abonnement.getAssignedToMemberId());
+        } else {
+            pstmt.setNull(7, Types.INTEGER);
+        }
+
+        pstmt.setString(8, abonnement.getLogoUrl());
+        pstmt.setString(9, abonnement.getColorHex());
     }
 }

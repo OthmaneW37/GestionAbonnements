@@ -359,7 +359,7 @@ public class DashboardController implements Initializable {
         javafx.scene.layout.HBox actionsRow = new javafx.scene.layout.HBox(12);
         actionsRow.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 
-        Button editBtn = new Button("✏️ Modifier");
+        Button editBtn = new Button("Modifier");
         editBtn.setStyle(
                 "-fx-background-color: rgba(255,255,255,0.22); " +
                         "-fx-text-fill: white; " +
