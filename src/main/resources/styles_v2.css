@@ -286,8 +286,8 @@
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
   -fx-cursor: hand;
   -fx-padding: 20;
-  -fx-min-width: 220;
-  -fx-max-width: 220;
+  -fx-min-width: 190;
+  -fx-max-width: 190;
   -fx-min-height: 160;
 }
 
@@ -791,6 +791,128 @@
 .icon-button-profile {
   -fx-background-color: transparent;
   -fx-cursor: hand;
+}
+
+/* ================== SCROLL BAR MODERNIZATION ================== */
+.scroll-bar {
+  -fx-background-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+}
+
+.scroll-bar:vertical {
+  -fx-pref-width: 10;
+}
+
+.scroll-bar:horizontal {
+  -fx-pref-height: 10;
+}
+
+.scroll-bar .thumb {
+  -fx-background-color: -fx-theme-bg-hover;
+  -fx-background-radius: 5;
+  -fx-background-insets: 2;
+}
+
+.scroll-bar .thumb:hover {
+  -fx-background-color: -fx-theme-text-muted;
+}
+
+.scroll-bar .track {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-radius: 0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 0;
+  -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+  -fx-background-color: transparent;
+  -fx-shape: " ";
+  -fx-padding: 0;
+}
+
+/* ================== COMBO BOX MODERNIZATION ================== */
+.combo-box {
+  -fx-background-color: -fx-theme-bg-secondary;
+  -fx-background-radius: 12;
+  -fx-border-color: transparent;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
+  -fx-padding: 4 10;
+}
+
+.combo-box:hover {
+  -fx-background-color: -fx-theme-bg-tertiary;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.15), 8, 0, 0, 3);
+}
+
+.combo-box .cell {
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-background-color: transparent;
+  -fx-padding: 5 10 5 0;
+}
+
+.combo-box .arrow-button {
+  -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+  -fx-background-color: -fx-theme-text-secondary;
+  -fx-padding: 0.333333em 0.5em 0.333333em 0.5em;
+  /* Make arrow smaller/sharper */
+  -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+}
+
+.combo-box .list-view {
+  -fx-background-color: -fx-theme-bg-secondary;
+  -fx-background-radius: 10;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 5);
+  -fx-border-color: -fx-theme-border-color;
+  -fx-border-width: 1;
+  -fx-border-radius: 10;
+  -fx-padding: 5;
+}
+
+.combo-box .list-cell {
+  -fx-background-color: transparent;
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-padding: 10 15;
+  -fx-background-radius: 5;
+}
+
+.combo-box .list-cell:filled:hover {
+  -fx-background-color: -fx-theme-bg-hover;
+}
+
+.combo-box .list-cell:filled:selected {
+  -fx-background-color: -fx-theme-accent-light;
+  -fx-text-fill: -fx-theme-accent;
+}
+
+/* ================== SEARCH FIELD MODERNIZATION ================== */
+.search-field {
+  -fx-background-color: -fx-theme-bg-secondary;
+  -fx-text-fill: -fx-theme-text-primary;
+  -fx-prompt-text-fill: -fx-theme-text-muted;
+  -fx-background-radius: 25;
+  -fx-padding: 12 20 12 40;
+  /* Left padding for icon space */
+  -fx-border-color: transparent;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+  /* We can use CSS background image for the icon if we had one, but padding helps visual balance */
+}
+
+.search-field:focused {
+  -fx-background-color: -fx-theme-bg-secondary;
+  -fx-border-color: -fx-theme-accent;
+  -fx-border-radius: 25;
+  -fx-effect: dropshadow(three-pass-box, rgba(108, 99, 255, 0.2), 8, 0, 0, 3);
 }
 
 .text-accent {

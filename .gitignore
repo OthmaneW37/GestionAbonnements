@@ -5,3 +5,18 @@ target/
 *.log
 src/main/resources/mail.properties
 subscriptions.csv
+
+# IDEs
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+logs/

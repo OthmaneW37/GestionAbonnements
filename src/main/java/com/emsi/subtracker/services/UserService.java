@@ -82,4 +82,8 @@ public class UserService {
     public void deleteUser(User user) {
         userDAO.delete(user.getId());
     }
+
+    public User getUserById(int id) {
+        return userDAO.findById(id).orElse(null);
+    }
 }

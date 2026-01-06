@@ -121,8 +121,14 @@ public class DashboardController implements Initializable {
 
     private void refreshDashboard() {
         com.emsi.subtracker.models.User currentUser = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
-        if (currentUser != null && lblWelcome != null) {
-            lblWelcome.setText("Bonjour, " + currentUser.getUsername());
+
+        if (lblWelcome != null) {
+            if (currentUser != null) {
+                lblWelcome.setText("Bonjour, " + currentUser.getUsername());
+            } else if (com.emsi.subtracker.utils.UserSession.getInstance().isFamilyMember()) {
+                lblWelcome.setText(
+                        "Bonjour, " + com.emsi.subtracker.utils.UserSession.getInstance().getFamilyMember().getName());
+            }
         }
 
         // Fetch Data once
@@ -571,6 +577,10 @@ public class DashboardController implements Initializable {
      * échéance dans 3 jours.
      */
     private void checkRenewalAlerts() {
+        if (com.emsi.subtracker.utils.UserSession.getInstance().isFamilyMember()) {
+            return; // Pas d'alertes email pour les membres de famille
+        }
+
         User currentUser = com.emsi.subtracker.utils.UserSession.getInstance().getUser();
         if (currentUser != null && allSubscriptions != null) {
             emailService.checkAndSendAlerts(currentUser, allSubscriptions);

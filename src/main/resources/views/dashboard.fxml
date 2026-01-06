@@ -94,7 +94,7 @@
                 <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card">
                     <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
                     <Label text="Abonnements Actifs" styleClass="card-title"/>
-                    <Label fx:id="lblNombreAbonnements" text="0" style="-fx-text-fill: -fx-theme-text-primary; -fx-font-size: 28; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblNombreAbonnements" text="0" styleClass="text-title-medium"/>
                 </VBox>
             </HBox>
             
@@ -102,15 +102,15 @@
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Label text="Vos Abonnements" styleClass="text-section-title"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <ComboBox fx:id="categoryFilter" promptText="Catégorie" prefWidth="150" styleClass="combo-box"/>
-                <ComboBox fx:id="sortFilter" promptText="Trier par" prefWidth="150" styleClass="combo-box"/>
+                <ComboBox fx:id="categoryFilter" promptText="Catégorie" prefWidth="200" styleClass="combo-box"/>
+                <ComboBox fx:id="sortFilter" promptText="Trier par" prefWidth="200" styleClass="combo-box"/>
                 <Button text="+ Ajouter" onAction="#onBtnAjouterClick" styleClass="button-action"/>
             </HBox>
             
             <!-- GRID D'ABONNEMENTS -->
             <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
                        style="-fx-background-color: transparent; -fx-background: transparent;">
-                <FlowPane fx:id="cardsContainer" hgap="20" vgap="20" style="-fx-background-color: transparent;" prefWrapLength="1000">
+                <FlowPane fx:id="cardsContainer" hgap="15" vgap="20" style="-fx-background-color: transparent;" prefWrapLength="1000">
                     <padding>
                         <Insets top="10" right="10" bottom="10" left="10"/>
                     </padding>

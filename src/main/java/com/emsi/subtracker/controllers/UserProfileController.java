@@ -63,17 +63,24 @@ public class UserProfileController implements Initializable {
 
     private void loadUserData() {
         UserSession session = UserSession.getInstance();
-        User user = session.getUser();
 
-        if (user != null) {
-            if (session.isFamilyMember()) {
-                // Case: Family Member
-                com.emsi.subtracker.models.FamilyMember member = session.getFamilyMember();
+        if (session.isFamilyMember()) {
+            // Case: Family Member
+            com.emsi.subtracker.models.FamilyMember member = session.getFamilyMember();
+            if (member != null) {
                 lblUsername.setText(member.getName());
-                lblEmail.setText("Compte Famille (" + user.getUsername() + ")");
+
+                // Fetch Parent Email
+                User parent = userService.getUserById(member.getUserId());
+                String parentEmail = (parent != null) ? parent.getEmail() : "Email introuvable";
+
+                lblEmail.setText("Compte Famille (" + parentEmail + ")");
                 lblEmail.setStyle("-fx-text-fill: #A0A0A0; -fx-font-size: 13; -fx-font-style: italic;");
-            } else {
-                // Case: Parent User
+            }
+        } else {
+            // Case: Parent User
+            User user = session.getUser();
+            if (user != null) {
                 lblUsername.setText(user.getUsername());
                 lblEmail.setText(user.getEmail());
                 lblEmail.setStyle("-fx-text-fill: #A0A0A0; -fx-font-size: 14;");
@@ -83,14 +90,14 @@ public class UserProfileController implements Initializable {
                     loadProfileImage(user.getProfilePicture());
                 }
             }
-
-            // Fetch stats (Service already handles filtering based on session)
-            List<Abonnement> subs = service.getAll();
-            lblTotalSubscriptions.setText(String.valueOf(subs.size()));
-
-            double total = service.calculerTotalMensuel();
-            lblTotalCost.setText(df.format(total) + " DH");
         }
+
+        // Fetch stats (Service already handles filtering based on session)
+        List<Abonnement> subs = service.getAll();
+        lblTotalSubscriptions.setText(String.valueOf(subs.size()));
+
+        double total = service.calculerTotalMensuel();
+        lblTotalCost.setText(df.format(total) + " DH");
     }
 
     @FXML

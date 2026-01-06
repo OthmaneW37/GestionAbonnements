@@ -40,6 +40,13 @@ public class SceneManager {
             } else {
                 // Navigation: Replace Root
                 scene.setRoot(root);
+
+                // Ensure Stylesheet is present (crucial for Logout/Login flow)
+                String cssPath = Objects.requireNonNull(Main.class.getResource("/styles_v2.css")).toExternalForm();
+                if (!scene.getStylesheets().contains(cssPath)) {
+                    scene.getStylesheets().add(cssPath);
+                }
+
                 ThemeManager.applyTheme(scene); // Re-apply theme to new root
 
                 // Prevent Window Resizing: Ensure stage respects maximized state
