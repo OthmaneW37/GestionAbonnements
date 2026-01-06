@@ -175,6 +175,9 @@ public class SettingsController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
                 Stage stage = new Stage();
                 Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(getClass().getResource("/styles_v2.css").toExternalForm());
+                com.emsi.subtracker.utils.ThemeManager.applyTheme(scene);
+
                 stage.setTitle("SubTracker - Login");
                 stage.setScene(scene);
                 stage.show();
@@ -208,7 +211,11 @@ public class SettingsController implements Initializable {
                 try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
                     Stage stage = new Stage();
-                    stage.setScene(new Scene(fxmlLoader.load()));
+                    Scene scene = new Scene(fxmlLoader.load());
+                    scene.getStylesheets().add(getClass().getResource("/styles_v2.css").toExternalForm());
+                    com.emsi.subtracker.utils.ThemeManager.applyTheme(scene);
+
+                    stage.setScene(scene);
                     stage.show();
 
                     javafx.stage.Window.getWindows().stream()

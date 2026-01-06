@@ -905,7 +905,6 @@
   /* Left padding for icon space */
   -fx-border-color: transparent;
   -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
-  /* We can use CSS background image for the icon if we had one, but padding helps visual balance */
 }
 
 .search-field:focused {
