@@ -335,14 +335,13 @@ public class DashboardController implements Initializable {
         String symbol = getCurrencySymbol(currency);
 
         Label lblPrice = new Label(df.format(displayPrice));
-        lblPrice.setStyle("-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;");
+        lblPrice.getStyleClass().add("sub-card-price");
 
         Label currencyLabel = new Label(symbol);
-        currencyLabel.setStyle(
-                "-fx-text-fill: rgba(255,255,255,0.85); -fx-font-size: 20; -fx-font-weight: bold; -fx-padding: 8 0 0 0;");
+        currencyLabel.getStyleClass().add("sub-card-currency");
 
         Label freqLabel = new Label("/ " + getFrequencyShort(sub.getFrequence()));
-        freqLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.75); -fx-font-size: 16; -fx-padding: 10 0 0 0;");
+        freqLabel.getStyleClass().add("sub-card-freq");
 
         priceRow.getChildren().addAll(lblPrice, currencyLabel, freqLabel);
 
