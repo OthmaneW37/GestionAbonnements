@@ -225,27 +225,22 @@ public class DashboardController implements Initializable {
 
     private VBox createSubscriptionCard(Abonnement sub) {
         VBox card = new VBox(14);
-        card.setPrefWidth(320); // Reduced from 340
-        card.setMinHeight(200);
+        card.getStyleClass().add("sub-card"); // Apply CSS class for dimensions and base style
 
         // 🎨 SMART BRANDING COLOR
         String colorHex = sub.getColorHex();
+        String bgStyle;
+
         if (colorHex == null || colorHex.isEmpty()) {
             colorHex = getCategoryGradient(sub.getCategorie()); // Fallback to category gradient
-            card.setStyle(
-                    "-fx-background-color: linear-gradient(to bottom right, " + colorHex + "); " +
-                            "-fx-background-radius: 18; " +
-                            "-fx-padding: 24; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 16, 0, 0, 4); " +
-                            "-fx-cursor: hand;");
+            bgStyle = "-fx-background-color: linear-gradient(to bottom right, " + colorHex + ");";
         } else {
-            card.setStyle(
-                    "-fx-background-color: " + colorHex + "; " +
-                            "-fx-background-radius: 18; " +
-                            "-fx-padding: 24; " +
-                            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 16, 0, 0, 4); " +
-                            "-fx-cursor: hand;");
+            bgStyle = "-fx-background-color: " + colorHex + ";";
         }
+
+        // Only set background color via inline style, let CSS handle the rest (padding,
+        // radius, shadow)
+        card.setStyle(bgStyle);
 
         // HEADER: Nom + Logo
         javafx.scene.layout.HBox header = new javafx.scene.layout.HBox(12);
